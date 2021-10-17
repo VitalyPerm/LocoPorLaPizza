@@ -29,50 +29,15 @@ abstract class BaseFragment<VB : ViewBinding>(
     }
 
     fun replaceFragment(fragment: Fragment) {
-        requireActivity().supportFragmentManager
+        parentFragmentManager
             .beginTransaction()
             .replace(R.id.root_container, fragment)
             .addToBackStack(null)
             .commit()
     }
 
-    fun addFragment(fragment: Fragment) {
-        requireActivity().supportFragmentManager
-            .beginTransaction()
-            .add(R.id.root_container, fragment)
-            .commit()
-    }
-
     fun clearBackStack() {
-        requireActivity().supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        parentFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
 
 }
-
-//abstract class BaseFragment: Fragment() {
-//
-//    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-//        val binding =
-//    }
-//    val fm = requireActivity().supportFragmentManager
-//
-//    fun addFragment(fragment: Fragment) {
-//        fm
-//            .beginTransaction()
-//            .add(R.id.root_container, fragment)
-//            .commit()
-//    }
-//
-//    fun replaceFragment(fragment: Fragment) {
-//        fm
-//            .beginTransaction()
-//            .replace(R.id.root_container, fragment)
-//            .addToBackStack(null)
-//            .commit()
-//    }
-//
-//    fun clearBackStack() {
-//        fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-//    }
-//
-//}

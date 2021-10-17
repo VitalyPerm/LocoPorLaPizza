@@ -15,7 +15,7 @@
         <item name="android:windowFullscreen">true</item>
         <!-- Customize your theme here. -->
     </style>
-    
+
     <style name="splashScreenTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/ic_splash</item>
         <item name="android:statusBarColor">@color/main</item>
@@ -23,5 +23,9 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:navigationBarColor">@color/main</item>
 
+    </style>
+
+    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">28sp</item>
     </style>
 </resources>
