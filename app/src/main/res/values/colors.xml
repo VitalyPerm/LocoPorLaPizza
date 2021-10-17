@@ -8,4 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="main">#FFD089</color>
+    <color name="pizza_black">#424242</color>
+    <color name="bottom_sheet_dialog_white">#F6F6F6</color>
+    <color name="main_gray">#E5E5E5</color>
 </resources>

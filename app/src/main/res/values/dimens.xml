@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    Text
+    <dimen name="text_xs">12sp</dimen>
+    <dimen name="text_s">14sp</dimen>
+    <dimen name="text_m">18sp</dimen>
+    <dimen name="text_l">22sp</dimen>
+    <dimen name="text_xl">24sp</dimen>
+
+    Margin
+    <dimen name="margin_xxs">9dp</dimen>
+    <dimen name="margin_xs">12dp</dimen>
+    <dimen name="margin_ss">13dp</dimen>
+    <dimen name="margin_sm">14dp</dimen>
+    <dimen name="margin_sl">15dp</dimen>
+    <dimen name="margin_m">16dp</dimen>
+    <dimen name="margin_l">19dp</dimen>
+    <dimen name="margin_xl">20dp</dimen>
+    <dimen name="margin_xxl">23dp</dimen>
+    <dimen name="margin_huge">24dp</dimen>
+    <dimen name="margin_x_huge">25dp</dimen>
+
+
+    Corner radius
+    <dimen name="corner_s">15dp</dimen>
+    <dimen name="corner_m">20dp</dimen>
+    <dimen name="corner_l">24dp</dimen>
+
+    Other
+    <dimen name="fragment_end_logo_margin_top">170dp</dimen>
+    <dimen name="end_btn_back_width">310dp</dimen>
+    <dimen name="end_btn_Back_height">60dp</dimen>
+    <dimen name="checkout_btn_height">95dp</dimen>
+    <dimen name="padding_m">15dp</dimen>
+</resources>

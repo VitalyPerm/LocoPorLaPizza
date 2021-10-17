@@ -1,12 +1,13 @@
-package com.vitaly.locoporlapizza
+package com.vitaly.locoporlapizza.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import com.vitaly.locoporlapizza.R
+import com.vitaly.locoporlapizza.databinding.FragmentPreviewBinding
 
-class PreviewFragment : Fragment() {
+class PreviewFragment : BaseFragment<FragmentPreviewBinding>(FragmentPreviewBinding::inflate) {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

@@ -1,22 +1,15 @@
-package com.vitaly.locoporlapizza
+package com.vitaly.locoporlapizza.view
 
 import android.os.Bundle
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.View
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.Fragment
+import com.vitaly.locoporlapizza.R
 import com.vitaly.locoporlapizza.databinding.FragmentCartBinding
 
-class CartFragment : Fragment() {
+class CartFragment : BaseFragment<FragmentCartBinding>(FragmentCartBinding::inflate) {
     private lateinit var toolbar: Toolbar
-    private lateinit var binding: FragmentCartBinding
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentCartBinding.inflate(layoutInflater, container, false)
-        return binding.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initialization()
@@ -24,11 +17,11 @@ class CartFragment : Fragment() {
 
     private fun initialization() {
         binding.btnPlaceOrder.setOnClickListener {
-            FMHelper.replaceFragment(EndFragment())
+            replaceFragment(EndFragment())
         }
         toolbar = binding.toolbar
         toolbar.title = getString(R.string.cart)
-        FMHelper.APP_ACTIVITY.setSupportActionBar(toolbar)
+        (activity as MainActivity).setSupportActionBar(toolbar)
         setHasOptionsMenu(true)
     }
 
