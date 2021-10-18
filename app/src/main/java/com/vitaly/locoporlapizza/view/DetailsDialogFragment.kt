@@ -33,8 +33,6 @@ class DetailsDialogFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initialize()
-
-
     }
 
     private fun initialize() {

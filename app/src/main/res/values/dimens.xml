@@ -15,6 +15,7 @@
     <dimen name="margin_sm">14dp</dimen>
     <dimen name="margin_sl">15dp</dimen>
     <dimen name="margin_m">16dp</dimen>
+    <dimen name="margin_ml">18dp</dimen>
     <dimen name="margin_l">19dp</dimen>
     <dimen name="margin_xl">20dp</dimen>
     <dimen name="margin_xxl">23dp</dimen>
@@ -33,4 +34,5 @@
     <dimen name="end_btn_Back_height">60dp</dimen>
     <dimen name="checkout_btn_height">95dp</dimen>
     <dimen name="padding_m">15dp</dimen>
+    <dimen name="main_fragment_image_height">135dp</dimen>
 </resources>
