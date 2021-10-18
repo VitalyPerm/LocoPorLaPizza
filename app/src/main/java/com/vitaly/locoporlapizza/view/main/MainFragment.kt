@@ -74,14 +74,9 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
         val searchEditText = searchView.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
         searchEditText.setTextColor(Color.BLACK)
         searchEditText.setHintTextColor(Color.BLACK)
-        searchView.setSearchableInfo(
-            manager.getSearchableInfo(requireActivity().componentName)
-        )
-
+        searchView.setSearchableInfo(manager.getSearchableInfo(requireActivity().componentName))
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return true
-            }
+            override fun onQueryTextSubmit(query: String?): Boolean = true
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 tempPizzaList.clear()
@@ -110,7 +105,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
         bundle.putString(URL, adapter.pizzaList[position].imageUrl)
         bundle.putString(NAME, adapter.pizzaList[position].name)
         bundle.putString(DESCRIPTION, adapter.pizzaList[position].description)
-        bundle.putString(PRICE, adapter.pizzaList[position].price.toString())
+        bundle.putInt(PRICE, adapter.pizzaList[position].price.toInt())
         detailsDialogFragment.arguments = bundle
         detailsDialogFragment.show(parentFragmentManager, "")
     }

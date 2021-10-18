@@ -28,7 +28,7 @@ class MainFragmentAdapter(private val listener: OnItemClickListener) : RecyclerV
             ivPizza.loadPicture(pizzaList[position].imageUrl)
             tvPizzaName.text = pizzaList[position].name
             tvPizzaDesc.text = pizzaList[position].description
-            tvPrice.text = pizzaList[position].price.toInt().toString() + "₽"
+            tvPrice.text = holder.itemView.context.getString(R.string.price, pizzaList[position].price.toInt())
         }
         holder.itemView.setOnClickListener {
             listener.onItemClick(position)

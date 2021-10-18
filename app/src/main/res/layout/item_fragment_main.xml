@@ -56,23 +56,12 @@
         android:id="@+id/tv_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_sm"
         android:layout_marginBottom="@dimen/margin_sm"
         android:textColor="@color/pizza_black"
         android:textSize="@dimen/text_l"
         app:layout_constraintBottom_toBottomOf="@id/tv_pizza_desc"
-        app:layout_constraintEnd_toStartOf="@id/currency"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_pizza_name"
         tools:text="799" />
-
-    <TextView
-        android:id="@+id/currency"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/margin_sm"
-        android:textColor="@color/pizza_black"
-        android:textSize="@dimen/text_l"
-        app:layout_constraintBottom_toBottomOf="@id/tv_price"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:text="₽" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

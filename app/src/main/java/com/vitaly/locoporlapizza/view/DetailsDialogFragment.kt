@@ -15,10 +15,11 @@ import com.vitaly.locoporlapizza.databinding.FragmentDetailsDialogBinding
 import com.vitaly.locoporlapizza.utils.*
 
 class DetailsDialogFragment : BottomSheetDialogFragment() {
-    private lateinit var binding: FragmentDetailsDialogBinding
+    private var _binding: FragmentDetailsDialogBinding? = null
+    private val binding get() = _binding!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentDetailsDialogBinding.inflate(layoutInflater, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = FragmentDetailsDialogBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
@@ -48,7 +49,7 @@ class DetailsDialogFragment : BottomSheetDialogFragment() {
             ivPizza.loadPicture(arguments?.getString(URL))
             tvPizzaName.text = arguments?.getString(NAME)
             tvPizzaDesc.text = arguments?.getString(DESCRIPTION)
-            price.text = arguments?.getString(PRICE)
+            price.text = getString(R.string.price, arguments?.getInt(PRICE))
         }
     }
 
@@ -65,5 +66,10 @@ class DetailsDialogFragment : BottomSheetDialogFragment() {
 
     companion object {
         const val HEIGHT_PERCENT_OFFSET_TOP = 5
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }
