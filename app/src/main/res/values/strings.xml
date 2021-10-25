@@ -8,5 +8,8 @@
     <string name="cart">Cart</string>
     <string name="search">Search</string>
     <string name="checkout">Checkout</string>
+    <string name="add_to_cart">Add to cart</string>
     <string name="price">%1$d\u20BD</string>
+    <string name="preview_pizza_count">%d/%d</string>
+    <string name="write_something">Write something</string>
 </resources>

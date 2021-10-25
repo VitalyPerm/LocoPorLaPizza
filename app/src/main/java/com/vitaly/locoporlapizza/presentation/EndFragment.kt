@@ -1,11 +1,11 @@
-package com.vitaly.locoporlapizza.view
+package com.vitaly.locoporlapizza.presentation
 
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import com.vitaly.locoporlapizza.databinding.FragmentEndBinding
 
-import com.vitaly.locoporlapizza.view.main.MainFragment
+import com.vitaly.locoporlapizza.presentation.main.MainFragment
 
 class EndFragment : BaseFragment<FragmentEndBinding>(FragmentEndBinding::inflate) {
 

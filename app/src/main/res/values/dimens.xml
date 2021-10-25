@@ -7,8 +7,11 @@
     <dimen name="text_m">18sp</dimen>
     <dimen name="text_l">22sp</dimen>
     <dimen name="text_xl">24sp</dimen>
+    <dimen name="text_xxl">28sp</dimen>
 
     Margin
+    <dimen name="margin_tiny">1dp</dimen>
+    <dimen name="margin_tiny_s">2dp</dimen>
     <dimen name="margin_xxs">9dp</dimen>
     <dimen name="margin_xs">12dp</dimen>
     <dimen name="margin_ss">13dp</dimen>
@@ -21,6 +24,8 @@
     <dimen name="margin_xxl">23dp</dimen>
     <dimen name="margin_huge">24dp</dimen>
     <dimen name="margin_x_huge">25dp</dimen>
+    <dimen name="margin_xl_huge">28dp</dimen>
+    <dimen name="margin_xxl_huge">34dp</dimen>
 
 
     Corner radius
@@ -35,4 +40,5 @@
     <dimen name="checkout_btn_height">95dp</dimen>
     <dimen name="padding_m">15dp</dimen>
     <dimen name="main_fragment_image_height">135dp</dimen>
+    <dimen name="details_dialog_image_height">280dp</dimen>
 </resources>

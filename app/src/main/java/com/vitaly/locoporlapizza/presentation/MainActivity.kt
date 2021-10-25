@@ -1,9 +1,9 @@
-package com.vitaly.locoporlapizza.view
+package com.vitaly.locoporlapizza.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.vitaly.locoporlapizza.R
-import com.vitaly.locoporlapizza.view.main.MainFragment
+import com.vitaly.locoporlapizza.presentation.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

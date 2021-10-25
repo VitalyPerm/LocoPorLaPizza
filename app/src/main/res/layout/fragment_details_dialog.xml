@@ -7,61 +7,6 @@
     android:layout_height="match_parent"
     tools:background="@color/white">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv_pizza"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_x_huge"
-        android:layout_marginTop="@dimen/margin_xl"
-        android:layout_marginEnd="@dimen/margin_x_huge"
-        app:cardCornerRadius="@dimen/corner_s"
-        app:layout_constraintBottom_toTopOf="@id/tv_pizza_name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/line">
-
-        <ImageView
-            android:id="@+id/iv_pizza"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/pizza_example" />
-    </androidx.cardview.widget.CardView>
-
-    <TextView
-        android:id="@+id/tv_pizza_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_x_huge"
-        android:layout_marginTop="@dimen/margin_xxs"
-        android:layout_marginEnd="@dimen/margin_x_huge"
-        android:textColor="@color/pizza_black"
-        android:textSize="@dimen/text_xl"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cv_pizza"
-        tools:text="Margarita" />
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="@dimen/margin_sl"
-        android:layout_marginBottom="@dimen/margin_sl"
-        app:layout_constraintBottom_toTopOf="@+id/checkout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_pizza_name">
-
-        <TextView
-            android:id="@+id/tv_pizza_desc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_x_huge"
-            android:layout_marginEnd="@dimen/margin_xl"
-            android:textColor="@color/pizza_black"
-            android:textSize="@dimen/text_s"
-            tools:text="I LOVE PIZZA I LOVE PIZZA I LOVE PIZZA" />
-    </ScrollView>
-
-
     <ImageView
         android:id="@+id/line"
         android:layout_width="wrap_content"
@@ -71,6 +16,63 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/margin_tiny"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@id/checkout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/line">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_pizza"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_x_huge"
+                android:layout_marginTop="@dimen/margin_xl"
+                android:layout_marginEnd="@dimen/margin_x_huge"
+                app:cardCornerRadius="@dimen/corner_s">
+
+                <ImageView
+                    android:id="@+id/iv_pizza"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/details_dialog_image_height"
+                    android:scaleType="center"
+                    android:src="@drawable/pizza_example" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/tv_pizza_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_x_huge"
+                android:layout_marginTop="@dimen/margin_xxs"
+                android:layout_marginEnd="@dimen/margin_x_huge"
+                android:textColor="@color/pizza_black"
+                android:textSize="@dimen/text_xl"
+                tools:text="Margarita" />
+
+
+            <TextView
+                android:id="@+id/tv_pizza_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_x_huge"
+                android:layout_marginEnd="@dimen/margin_xl"
+                android:layout_marginBottom="@dimen/margin_xxs"
+                android:textColor="@color/pizza_black"
+                android:textSize="@dimen/text_s"
+                tools:text="I LOVE PIZZA I LOVE PIZZA I LOVE PIZZA" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
     <FrameLayout
         android:id="@+id/checkout"
@@ -98,7 +100,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/margin_xxl"
                 android:layout_marginTop="@dimen/margin_xl"
-                android:text="@string/checkout"
+                android:text="@string/add_to_cart"
                 android:textColor="@color/pizza_black"
                 android:textSize="@dimen/text_m"
                 android:textStyle="bold" />

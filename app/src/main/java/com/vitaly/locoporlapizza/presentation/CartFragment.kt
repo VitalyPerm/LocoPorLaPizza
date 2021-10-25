@@ -1,4 +1,4 @@
-package com.vitaly.locoporlapizza.view
+package com.vitaly.locoporlapizza.presentation
 
 import android.os.Bundle
 import android.view.Menu
