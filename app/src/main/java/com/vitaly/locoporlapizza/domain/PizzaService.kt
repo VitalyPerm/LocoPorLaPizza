@@ -17,9 +17,9 @@ class PizzaService {
         return retrofit.create(PizzaApi::class.java)
     }
     fun providePizzaApi(): PizzaApi {
-        return if (pizzaApi == null) {
+        if (pizzaApi == null) {
             pizzaApi = createService()
-            pizzaApi!!
-        } else pizzaApi!!
+        }
+        return pizzaApi as PizzaApi
     }
 }

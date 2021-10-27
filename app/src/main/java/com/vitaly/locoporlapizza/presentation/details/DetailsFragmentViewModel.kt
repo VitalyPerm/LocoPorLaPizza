@@ -13,6 +13,8 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 
 class DetailsFragmentViewModel(application: Application) : AndroidViewModel(application) {
     private lateinit var pizzaDao: PizzaDao
+    var selectedPizzaId: Int = 1
+    var selectedPizza: PizzaResponse? = null
     fun getData(id: Int): Single<PizzaResponse> {
         return PizzaService().providePizzaApi().getPizzaById(id)
     }

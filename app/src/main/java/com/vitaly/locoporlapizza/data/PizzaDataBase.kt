@@ -17,7 +17,7 @@ abstract class PizzaDataBase : RoomDatabase() {
             if (db_instance == null) {
                 db_instance = Room.databaseBuilder(
                     context.applicationContext, PizzaDataBase::class.java, "db"
-                ).allowMainThreadQueries().build()
+                ).build()
             }
             return db_instance as PizzaDataBase
         }

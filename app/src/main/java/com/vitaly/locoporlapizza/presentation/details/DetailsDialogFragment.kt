@@ -13,7 +13,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.vitaly.locoporlapizza.R
 import com.vitaly.locoporlapizza.databinding.FragmentDetailsDialogBinding
-import com.vitaly.locoporlapizza.domain.PizzaResponse
 import com.vitaly.locoporlapizza.presentation.preview.PreviewFragment
 import com.vitaly.locoporlapizza.utils.loadPicture
 import com.vitaly.locoporlapizza.utils.pizzaMapper
@@ -22,10 +21,8 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 
 class DetailsDialogFragment : BottomSheetDialogFragment() {
     private lateinit var viewModel: DetailsFragmentViewModel
-    private var pizzaId: Int = 1
     private var _binding: FragmentDetailsDialogBinding? = null
     private val binding get() = _binding!!
-    private var pizza: PizzaResponse? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentDetailsDialogBinding.inflate(layoutInflater, container, false)
@@ -46,15 +43,15 @@ class DetailsDialogFragment : BottomSheetDialogFragment() {
     }
 
     private fun initialize() {
-        pizzaId = arguments?.getInt(PIZZA_ID) ?: 1
         viewModel = ViewModelProvider(this).get(DetailsFragmentViewModel::class.java)
+        viewModel.selectedPizzaId = arguments?.getInt(PIZZA_ID) ?: 1
         viewModel.initDatabase()
 
         with(binding) {
             ivPizza.setOnClickListener {
                 val previewFragment = PreviewFragment()
                 val bundle = Bundle(1)
-                bundle.putInt(PIZZA_ID, pizzaId)
+                bundle.putInt(PIZZA_ID, viewModel.selectedPizzaId)
                 previewFragment.arguments = bundle
                 parentFragmentManager
                     .beginTransaction()
@@ -63,7 +60,7 @@ class DetailsDialogFragment : BottomSheetDialogFragment() {
                     .commit()
                 dismiss()
             }
-            viewModel.getData(pizzaId)
+            viewModel.getData(viewModel.selectedPizzaId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -71,12 +68,12 @@ class DetailsDialogFragment : BottomSheetDialogFragment() {
                     tvPizzaName.text = it.name
                     tvPizzaDesc.text = it.description
                     price.text = getString(R.string.price, it.price.toInt())
-                    pizza = it
+                    viewModel.selectedPizza = it
                 }, { it.printStackTrace() })
 
             checkout.setOnClickListener {
-                if (pizza != null) {
-                    viewModel.insert(pizzaMapper(pizza!!))
+                if (viewModel.selectedPizza != null) {
+                    viewModel.insert(pizzaMapper(viewModel.selectedPizza!!))
                 }
                 dismiss()
             }

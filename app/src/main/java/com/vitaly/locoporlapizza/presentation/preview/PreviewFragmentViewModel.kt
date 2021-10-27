@@ -13,6 +13,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 
 class PreviewFragmentViewModel(application: Application) : AndroidViewModel(application) {
     private lateinit var pizzaDao: PizzaDao
+    var selectedPizza: PizzaResponse? = null
     var images = mutableListOf<String>()
 
     fun getData(id: Int): Single<PizzaResponse> {
