@@ -6,24 +6,90 @@
     android:layout_height="match_parent"
     tools:background="@color/white">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:titleTextColor="@color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/btn_place_order"
+    <TextView
+        android:id="@+id/toolbar_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_sl"
-        android:text="Place Order"
+        android:layout_marginStart="@dimen/margin_x_huge"
+        android:layout_marginTop="19dp"
+        android:gravity="end"
+        android:text="Cart"
+        android:textColor="@color/pizza_black"
+        android:textSize="@dimen/text_xxl"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/button_clear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="25dp"
+        android:src="@drawable/ic_basket"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/margin_x_huge"
+        android:layout_marginEnd="@dimen/margin_x_huge"
+        android:layout_marginBottom="@dimen/margin_huge"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@id/checkout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_title"
+        tools:listitem="@layout/item_cart" />
+
+    <FrameLayout
+        android:id="@+id/checkout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/checkout_btn_height"
+        android:background="@drawable/checkout_bg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent">
 
+        <androidx.cardview.widget.CardView
+            android:id="@+id/btn_checkout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/margin_x_huge"
+            android:layout_marginTop="@dimen/margin_l"
+            android:layout_marginEnd="@dimen/margin_x_huge"
+            android:layout_marginBottom="@dimen/margin_m"
+            android:backgroundTint="#FFD089"
+            app:cardCornerRadius="@dimen/corner_m">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/margin_xxl"
+                android:layout_marginTop="@dimen/margin_xl"
+                android:layout_marginBottom="@dimen/margin_ml"
+                android:text="@string/checkout"
+                android:textColor="@color/pizza_black"
+                android:textSize="@dimen/text_m"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_price"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:layout_marginTop="@dimen/margin_xl"
+                android:layout_marginEnd="@dimen/margin_xxl"
+                android:layout_marginBottom="@dimen/margin_ml"
+                android:textColor="@color/pizza_black"
+                android:textSize="@dimen/text_m"
+                android:textStyle="bold"
+                tools:text="1658p" />
+        </androidx.cardview.widget.CardView>
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

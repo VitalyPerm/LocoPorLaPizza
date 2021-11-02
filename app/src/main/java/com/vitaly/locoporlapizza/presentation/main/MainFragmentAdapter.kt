@@ -7,17 +7,22 @@ import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.vitaly.locoporlapizza.R
+import com.vitaly.locoporlapizza.data.db.PizzaEntity
 import com.vitaly.locoporlapizza.databinding.ItemFragmentMainBinding
-import com.vitaly.locoporlapizza.domain.PizzaResponse
 import com.vitaly.locoporlapizza.utils.loadPicture
 
-class MainFragmentAdapter(private val onClick: (Int) -> Unit) : RecyclerView.Adapter<MainFragmentAdapter.MainFragmentViewHolder>(), Filterable {
+class MainFragmentAdapter(
+    private val progressDrawable: CircularProgressDrawable,
+    private val onClick: (Int) -> Unit
+) :
+    RecyclerView.Adapter<MainFragmentAdapter.MainFragmentViewHolder>(), Filterable {
     //Отфильтрованный лист
-    var pizzaList = mutableListOf<PizzaResponse>()
-    // Лист пицц c сервера при запуске приложения
-    var pizzaStartList = emptyList<PizzaResponse>()
+    var pizzaList = mutableListOf<PizzaEntity>()
 
+    // Лист пицц c сервера при запуске приложения
+    var pizzaStartList = emptyList<PizzaEntity>()
 
 
     inner class MainFragmentViewHolder(item: View) : RecyclerView.ViewHolder(item) {
@@ -25,16 +30,18 @@ class MainFragmentAdapter(private val onClick: (Int) -> Unit) : RecyclerView.Ada
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainFragmentViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_fragment_main, parent, false)
-        return MainFragmentViewHolder(view)
+        return MainFragmentViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.item_fragment_main, parent, false)
+        )
     }
 
     override fun onBindViewHolder(holder: MainFragmentViewHolder, position: Int) {
         with(holder.binding) {
-            ivPizza.loadPicture(pizzaList[position].imageUrls[0])
+            ivPizza.loadPicture(pizzaList[position].imageUrls[0], progressDrawable)
             tvPizzaName.text = pizzaList[position].name
             tvPizzaDesc.text = pizzaList[position].description
-            tvPrice.text = holder.itemView.context.getString(R.string.price, pizzaList[position].price.toInt())
+            tvPrice.text =
+                holder.itemView.context.getString(R.string.price, pizzaList[position].price.toInt())
         }
         holder.itemView.setOnClickListener {
             onClick.invoke(pizzaStartList[position].id)
@@ -43,7 +50,7 @@ class MainFragmentAdapter(private val onClick: (Int) -> Unit) : RecyclerView.Ada
 
     override fun getItemCount(): Int = pizzaList.size
 
-    fun setList(pizzaList: List<PizzaResponse>) {
+    fun setList(pizzaList: List<PizzaEntity>) {
         val diffCallback = MainFragmentDiffUtil(this.pizzaList, pizzaList)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
         this.pizzaList.clear()
@@ -52,14 +59,14 @@ class MainFragmentAdapter(private val onClick: (Int) -> Unit) : RecyclerView.Ada
     }
 
     override fun getFilter(): Filter {
-        var pizzaFilterList: MutableList<PizzaResponse>
+        var pizzaFilterList: MutableList<PizzaEntity>
         return object : Filter() {
             override fun performFiltering(p0: CharSequence?): FilterResults {
                 val pizzaChar = p0.toString().lowercase()
                 pizzaFilterList = if (pizzaChar.isEmpty()) {
                     pizzaStartList.toMutableList()
                 } else {
-                    val resultList = mutableListOf<PizzaResponse>()
+                    val resultList = mutableListOf<PizzaEntity>()
                     pizzaStartList.forEach {
                         if (it.name.lowercase().contains(pizzaChar)) resultList.add(it)
                     }
@@ -71,7 +78,7 @@ class MainFragmentAdapter(private val onClick: (Int) -> Unit) : RecyclerView.Ada
             }
 
             override fun publishResults(p0: CharSequence?, p1: FilterResults?) {
-                pizzaFilterList = p1?.values as MutableList<PizzaResponse>
+                pizzaFilterList = p1?.values as MutableList<PizzaEntity>
                 setList(pizzaFilterList)
             }
         }
@@ -79,8 +86,8 @@ class MainFragmentAdapter(private val onClick: (Int) -> Unit) : RecyclerView.Ada
 }
 
 class MainFragmentDiffUtil(
-    private val oldList: List<PizzaResponse>,
-    private val newList: List<PizzaResponse>
+    private val oldList: List<PizzaEntity>,
+    private val newList: List<PizzaEntity>
 ) : DiffUtil.Callback() {
     override fun getOldListSize(): Int = oldList.size
     override fun getNewListSize(): Int = newList.size

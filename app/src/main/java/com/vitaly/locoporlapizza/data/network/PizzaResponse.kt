@@ -1,4 +1,4 @@
-package com.vitaly.locoporlapizza.domain
+package com.vitaly.locoporlapizza.data.network
 
 data class PizzaResponse(
     val id: Int,

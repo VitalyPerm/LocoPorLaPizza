@@ -1,33 +1,31 @@
 package com.vitaly.locoporlapizza.presentation.details
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import com.vitaly.locoporlapizza.data.PizzaDao
-import com.vitaly.locoporlapizza.data.PizzaDataBase
-import com.vitaly.locoporlapizza.data.PizzaEntity
-import com.vitaly.locoporlapizza.domain.PizzaResponse
-import com.vitaly.locoporlapizza.domain.PizzaService
+import androidx.lifecycle.ViewModel
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
+import com.vitaly.locoporlapizza.data.db.PizzaDao
+import com.vitaly.locoporlapizza.data.db.PizzaEntity
+import com.vitaly.locoporlapizza.utils.addPizzaMapper
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.schedulers.Schedulers
+import javax.inject.Inject
 
-class DetailsFragmentViewModel(application: Application) : AndroidViewModel(application) {
-    private lateinit var pizzaDao: PizzaDao
-    var selectedPizzaId: Int = 1
-    var selectedPizza: PizzaResponse? = null
-    fun getData(id: Int): Single<PizzaResponse> {
-        return PizzaService().providePizzaApi().getPizzaById(id)
+class DetailsFragmentViewModel @Inject constructor(
+    val progressBar: CircularProgressDrawable,
+    val pizzaDao: PizzaDao
+) : ViewModel() {
+
+    lateinit var selectedPizza: PizzaEntity
+
+
+    fun getPizzaById(id: Int): Single<PizzaEntity> {
+        return pizzaDao.getPizzaById(id)
     }
 
-    fun initDatabase() {
-        pizzaDao = PizzaDataBase.getDatabaseInstance(getApplication()).getPizzaDao()
+    fun addPizza(pizza: PizzaEntity): Completable {
+        return pizzaDao.update(addPizzaMapper(pizza))
     }
 
-    fun insert(pizza: PizzaEntity) {
-        Completable.fromAction {
-            pizzaDao.insert(pizza)
-        }.subscribeOn(Schedulers.io())
-            .subscribe()
+    companion object {
+        const val TAG = "DETAILS_FRAGMENT"
     }
-
 }

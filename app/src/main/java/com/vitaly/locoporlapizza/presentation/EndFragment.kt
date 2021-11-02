@@ -19,11 +19,13 @@ class EndFragment : BaseFragment<FragmentEndBinding>(FragmentEndBinding::inflate
             replaceFragment(MainFragment())
             clearBackStack()
         }
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                replaceFragment(MainFragment())
-                clearBackStack()
-            }
-        })
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    replaceFragment(MainFragment())
+                    clearBackStack()
+                }
+            })
     }
 }
