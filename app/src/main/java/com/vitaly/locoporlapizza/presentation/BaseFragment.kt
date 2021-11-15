@@ -24,6 +24,7 @@ abstract class BaseFragment<VB : ViewBinding>(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        retainInstance = true
         _binding = inflate.invoke(inflater, container, false)
         return binding.root
     }
@@ -44,5 +45,4 @@ abstract class BaseFragment<VB : ViewBinding>(
     fun clearBackStack() {
         parentFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
-
 }

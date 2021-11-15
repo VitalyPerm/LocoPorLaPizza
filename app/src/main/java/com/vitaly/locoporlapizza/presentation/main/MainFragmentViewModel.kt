@@ -2,32 +2,48 @@ package com.vitaly.locoporlapizza.presentation.main
 
 import androidx.lifecycle.ViewModel
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
-import com.vitaly.locoporlapizza.data.db.PizzaDao
-import com.vitaly.locoporlapizza.data.db.PizzaEntity
-import com.vitaly.locoporlapizza.data.network.PizzaApi
 import com.vitaly.locoporlapizza.data.network.PizzaResponse
+import com.vitaly.locoporlapizza.domain.PizzaEntity
+import com.vitaly.locoporlapizza.domain.interactors.MainInteractor
 import com.vitaly.locoporlapizza.utils.pizzaMapper
-import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.subjects.PublishSubject
 import javax.inject.Inject
 
 
 class MainFragmentViewModel @Inject constructor(
-    val pizzaApi: PizzaApi,
-    val pizzaDao: PizzaDao, val progressBar: CircularProgressDrawable
+    private val interactor: MainInteractor, val progressBar: CircularProgressDrawable
 ) : ViewModel() {
+    private val disposable = CompositeDisposable()
+    val pizzasListFromDb: PublishSubject<List<PizzaEntity>> = PublishSubject.create()
 
-
-    fun getPizzaList(): Single<List<PizzaResponse>> {
-        return pizzaApi.getAll()
+    fun initDatabase() {
+        getPizzaList()
+        disposable.add(
+            interactor.getAllFromDb().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext { pizzasListFromDb.onNext(it) }
+                .doOnComplete { pizzasListFromDb.onComplete() }
+                .doOnError { it.printStackTrace() }
+                .subscribe()
+        )
     }
 
-    fun initDatabase(): Observable<List<PizzaEntity>> {
-        return pizzaDao.getAll()
+    private fun getPizzaList() {
+        interactor.getAllFromServer().subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    for (i in it) {
+                        insert(i)
+                    }
+                }, { it.printStackTrace() }
+            )
     }
 
-    fun insert(pizza: PizzaResponse): Completable {
-        return pizzaDao.insert(pizzaMapper(pizza))
+    private fun insert(pizza: PizzaResponse) {
+        interactor.insert(pizzaMapper(pizza))
     }
 }

@@ -1,4 +1,4 @@
-package com.vitaly.locoporlapizza.data.db
+package com.vitaly.locoporlapizza.domain
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

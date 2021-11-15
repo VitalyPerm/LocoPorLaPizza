@@ -3,7 +3,6 @@ package com.vitaly.locoporlapizza.presentation.details
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,16 +17,14 @@ import com.vitaly.locoporlapizza.databinding.FragmentDetailsDialogBinding
 import com.vitaly.locoporlapizza.presentation.preview.PreviewFragment
 import com.vitaly.locoporlapizza.utils.loadPicture
 import dagger.android.support.AndroidSupportInjection
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
 class DetailsDialogFragment : BottomSheetDialogFragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+    private val disposable = CompositeDisposable()
     private val viewModel: DetailsFragmentViewModel by viewModels { viewModelFactory }
-    private lateinit var disposable: CompositeDisposable
     private var _binding: FragmentDetailsDialogBinding? = null
     private val binding get() = _binding!!
 
@@ -55,43 +52,40 @@ class DetailsDialogFragment : BottomSheetDialogFragment() {
     }
 
     private fun initialize() {
-        disposable = CompositeDisposable()
+        viewModel.getPizzaById(arguments?.getInt(PIZZA_ID) ?: 1)
         with(binding) {
             ivPizza.setOnClickListener {
-                val previewFragment = PreviewFragment()
-                previewFragment.arguments = Bundle(1).apply {
-                    putInt(PIZZA_ID, arguments?.getInt(PIZZA_ID) ?: 1)
-                }
-                parentFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.root_container, previewFragment)
-                    .addToBackStack(null)
-                    .commit()
-                dismiss()
+                preparePreviewFragment()
             }
             disposable.add(
-                viewModel.getPizzaById(arguments?.getInt(PIZZA_ID) ?: 1)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({
-                        viewModel.selectedPizza = it
-                        ivPizza.loadPicture(it.imageUrls[0], viewModel.progressBar)
-                        tvPizzaName.text = it.name
-                        tvPizzaDesc.text = it.description
-                        price.text = getString(R.string.price, it.price.toInt())
-                    }, { it.printStackTrace() })
+                viewModel.selectedPizza.subscribe {
+                    ivPizza.loadPicture(it.imageUrls[0], viewModel.progressBar)
+                    tvPizzaName.text = it.name
+                    tvPizzaDesc.text = it.description
+                    price.text = getString(R.string.price, it.price.toInt())
+
+                }
             )
             checkout.setOnClickListener {
-                disposable.add(
-                    viewModel.addPizza(viewModel.selectedPizza).subscribeOn(Schedulers.io())
-                        .subscribe({
-                            Log.d(DetailsFragmentViewModel.TAG, "Pizza added")
-                        }, { it.printStackTrace() })
-                )
+                viewModel.addPizza(viewModel.selectedPizza.value)
                 dismiss()
             }
         }
     }
+
+    private fun preparePreviewFragment() {
+        val previewFragment = PreviewFragment()
+        previewFragment.arguments = Bundle(1).apply {
+            putInt(PIZZA_ID, arguments?.getInt(PIZZA_ID) ?: 1)
+        }
+        parentFragmentManager
+            .beginTransaction()
+            .replace(R.id.root_container, previewFragment)
+            .addToBackStack(null)
+            .commit()
+        dismiss()
+    }
+
 
     private fun setupBottomSheet(dialog: DialogInterface) {
         val bottomSheet =

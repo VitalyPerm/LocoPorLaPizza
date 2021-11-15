@@ -3,7 +3,7 @@ package com.vitaly.locoporlapizza.utils
 import android.widget.ImageView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
-import com.vitaly.locoporlapizza.data.db.PizzaEntity
+import com.vitaly.locoporlapizza.domain.PizzaEntity
 import com.vitaly.locoporlapizza.data.network.PizzaOrderEntity
 import com.vitaly.locoporlapizza.data.network.PizzaResponse
 

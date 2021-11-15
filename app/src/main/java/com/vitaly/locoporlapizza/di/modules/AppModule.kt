@@ -5,8 +5,12 @@ import androidx.room.Room
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.vitaly.locoporlapizza.data.db.PizzaDao
 import com.vitaly.locoporlapizza.data.db.PizzaDataBase
+import com.vitaly.locoporlapizza.data.RepositoryImpl
 import com.vitaly.locoporlapizza.data.network.PizzaApi
 import com.vitaly.locoporlapizza.di.App
+import com.vitaly.locoporlapizza.domain.interactors.CartInteractor
+import com.vitaly.locoporlapizza.domain.interactors.DetailsAndPreviewInteractor
+import com.vitaly.locoporlapizza.domain.interactors.MainInteractor
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -16,7 +20,7 @@ import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
-@Module(includes = [ActivityModule::class, ViewModelModule::class])
+@Module(includes = [FragmentModule::class, ViewModelModule::class])
 class AppModule {
     private val apiClient = OkHttpClient.Builder().addInterceptor(
         HttpLoggingInterceptor()
@@ -54,6 +58,31 @@ class AppModule {
             start()
         }
     }
+
+    @Singleton
+    @Provides
+    fun provideRepository(pizzaApi: PizzaApi, pizzaDao: PizzaDao): RepositoryImpl {
+        return RepositoryImpl(pizzaApi, pizzaDao)
+    }
+
+    @Singleton
+    @Provides
+    fun provideDetailsAndPreviewInteractor(repositoryImpl: RepositoryImpl): DetailsAndPreviewInteractor {
+        return DetailsAndPreviewInteractor(repositoryImpl)
+    }
+
+    @Singleton
+    @Provides
+    fun provideMainInteractor(repositoryImpl: RepositoryImpl): MainInteractor {
+        return MainInteractor(repositoryImpl)
+    }
+
+    @Singleton
+    @Provides
+    fun provideCartInteractor(repositoryImpl: RepositoryImpl): CartInteractor {
+        return CartInteractor(repositoryImpl)
+    }
+
 
     companion object {
         const val BASE_URL = "https://springboot-kotlin-demo.herokuapp.com/"

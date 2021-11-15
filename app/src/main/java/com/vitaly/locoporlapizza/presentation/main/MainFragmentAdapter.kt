@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.vitaly.locoporlapizza.R
-import com.vitaly.locoporlapizza.data.db.PizzaEntity
+import com.vitaly.locoporlapizza.domain.PizzaEntity
 import com.vitaly.locoporlapizza.databinding.ItemFragmentMainBinding
 import com.vitaly.locoporlapizza.utils.loadPicture
 
@@ -19,7 +19,7 @@ class MainFragmentAdapter(
 ) :
     RecyclerView.Adapter<MainFragmentAdapter.MainFragmentViewHolder>(), Filterable {
     //Отфильтрованный лист
-    var pizzaList = mutableListOf<PizzaEntity>()
+    private var pizzaList = mutableListOf<PizzaEntity>()
 
     // Лист пицц c сервера при запуске приложения
     var pizzaStartList = emptyList<PizzaEntity>()

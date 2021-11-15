@@ -11,23 +11,22 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.vitaly.locoporlapizza.R
-import com.vitaly.locoporlapizza.data.db.PizzaEntity
 import com.vitaly.locoporlapizza.databinding.FragmentMainBinding
+import com.vitaly.locoporlapizza.domain.PizzaEntity
 import com.vitaly.locoporlapizza.presentation.BaseFragment
 import com.vitaly.locoporlapizza.presentation.cart.CartFragment
 import com.vitaly.locoporlapizza.presentation.details.DetailsDialogFragment
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
 class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::inflate) {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+    private val disposable = CompositeDisposable()
     private val viewModel: MainFragmentViewModel by viewModels { viewModelFactory }
-    private lateinit var disposable: CompositeDisposable
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: MainFragmentAdapter
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -35,7 +34,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     }
 
     private fun initialization() {
-        disposable = CompositeDisposable()
         adapter = MainFragmentAdapter(viewModel.progressBar) { setUpDialog(it) }
         with(binding) {
             recyclerView = rv
@@ -49,28 +47,13 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
         }
         recyclerView.adapter = adapter
         setUpOnBackPressed()
+        viewModel.initDatabase()
         disposable.add(
-            viewModel.initDatabase()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    adapter.pizzaStartList = it
-                    adapter.setList(it)
-                    getPriceOfAllPizzas(it)
-                }, { it.printStackTrace() }),
-        )
-        disposable.add(
-            viewModel.getPizzaList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    for (i in it) {
-                        disposable.add(
-                            viewModel.insert(i).subscribeOn(Schedulers.io())
-                                .subscribe({}, { it.printStackTrace() })
-                        )
-                    }
-                }, { it.printStackTrace() })
+            viewModel.pizzasListFromDb.subscribe {
+                adapter.pizzaStartList = it
+                adapter.setList(it)
+                getPriceOfAllPizzas(it)
+            }
         )
     }
 
@@ -148,7 +131,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
         disposable.clear()
         super.onDestroyView()
     }
-
 
     companion object {
         const val PIZZA_ID = "ID"

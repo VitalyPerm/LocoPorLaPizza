@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.vitaly.locoporlapizza.R
-import com.vitaly.locoporlapizza.data.db.PizzaEntity
+import com.vitaly.locoporlapizza.domain.PizzaEntity
 import com.vitaly.locoporlapizza.databinding.ItemCartBinding
 import com.vitaly.locoporlapizza.utils.editPizzaQuantity
 

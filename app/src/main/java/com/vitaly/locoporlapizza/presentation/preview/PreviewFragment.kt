@@ -1,7 +1,6 @@
 package com.vitaly.locoporlapizza.presentation.preview
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
@@ -12,16 +11,14 @@ import com.vitaly.locoporlapizza.databinding.FragmentPreviewBinding
 import com.vitaly.locoporlapizza.presentation.BaseFragment
 import com.vitaly.locoporlapizza.presentation.details.DetailsDialogFragment
 import com.vitaly.locoporlapizza.presentation.main.MainFragment
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
 class PreviewFragment : BaseFragment<FragmentPreviewBinding>(FragmentPreviewBinding::inflate) {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+    private val disposable = CompositeDisposable()
     private val viewModel: PreviewFragmentViewModel by viewModels { viewModelFactory }
-    private lateinit var disposable: CompositeDisposable
     private lateinit var adapter: PreviewFragmentAdapter
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -29,49 +26,42 @@ class PreviewFragment : BaseFragment<FragmentPreviewBinding>(FragmentPreviewBind
     }
 
     private fun initialize() {
-        disposable = CompositeDisposable()
+        viewModel.getPizzaById(arguments?.getInt(PIZZA_ID) ?: 1)
         disposable.add(
-            viewModel.getPizzaById(arguments?.getInt(PIZZA_ID) ?: 1)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    viewModel.selectedPizza = it
-                    adapter = PreviewFragmentAdapter(
-                        viewModel.progressBar,
-                        viewModel.selectedPizza.imageUrls
-                    )
-                    with(binding) {
-                        pizzaName.text = viewModel.selectedPizza.name
-                        price.text =
-                            getString(R.string.price, viewModel.selectedPizza.price.toInt())
-                        vp2.adapter = adapter
-                        vp2.registerOnPageChangeCallback(viewPagerListener)
-                    }
-                }, { it.printStackTrace() })
+            viewModel.selectedPizza.subscribe {
+                adapter =
+                    PreviewFragmentAdapter(viewModel.progressBar, it.imageUrls)
+                with(binding) {
+                    pizzaName.text = it.name
+                    price.text =
+                        getString(R.string.price, it.price.toInt())
+                    vp2.adapter = adapter
+                    vp2.registerOnPageChangeCallback(viewPagerListener)
+                }
+            }
         )
 
-
         binding.btnCheckout.setOnClickListener {
-            disposable.add(
-                viewModel.addPizza(viewModel.selectedPizza).subscribeOn(Schedulers.io()).subscribe({
-                    Log.d(PreviewFragmentViewModel.TAG, "Pizza added")
-                }, { it.printStackTrace() })
-            )
-            replaceFragment(MainFragment())
+            setUpMainFragment()
         }
         binding.buttonBack.setOnClickListener {
-            setUpDialog()
+            setUpDetailsDialog()
         }
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    setUpDialog()
+                    setUpDetailsDialog()
                 }
             })
     }
 
-    private fun setUpDialog() {
+    private fun setUpMainFragment() {
+        viewModel.addPizza(viewModel.selectedPizza.value)
+        replaceFragment(MainFragment())
+    }
+
+    private fun setUpDetailsDialog() {
         replaceFragment(MainFragment())
         val detailsDialogFragment = DetailsDialogFragment()
         detailsDialogFragment.arguments = Bundle(1).apply {
@@ -85,15 +75,15 @@ class PreviewFragment : BaseFragment<FragmentPreviewBinding>(FragmentPreviewBind
             binding.pizzaCount.text = getString(
                 R.string.preview_pizza_count,
                 binding.vp2.currentItem + 1,
-                viewModel.selectedPizza.imageUrls.size
+                viewModel.selectedPizza.value.imageUrls.size
             )
             super.onPageSelected(position)
         }
     }
 
     override fun onDestroyView() {
-        binding.vp2.unregisterOnPageChangeCallback(viewPagerListener)
         disposable.clear()
+        binding.vp2.unregisterOnPageChangeCallback(viewPagerListener)
         super.onDestroyView()
     }
 

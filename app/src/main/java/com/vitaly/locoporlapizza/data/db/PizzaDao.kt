@@ -1,6 +1,7 @@
 package com.vitaly.locoporlapizza.data.db
 
 import androidx.room.*
+import com.vitaly.locoporlapizza.domain.PizzaEntity
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
@@ -13,11 +14,8 @@ interface PizzaDao {
     @Query("SELECT * FROM PizzaEntity where id=:id")
     fun getPizzaById(id: Int): Single<PizzaEntity>
 
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(pic: PizzaEntity): Completable
-
-    @Delete
-    fun delete(pic: PizzaEntity): Completable
 
     @Query("DELETE FROM PizzaEntity")
     fun clear(): Completable
