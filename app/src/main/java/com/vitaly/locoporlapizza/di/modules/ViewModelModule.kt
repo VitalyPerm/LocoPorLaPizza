@@ -3,10 +3,10 @@ package com.vitaly.locoporlapizza.di.modules
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.vitaly.locoporlapizza.di.ViewModelFactory
-import com.vitaly.locoporlapizza.presentation.cart.CartFragmentViewModel
-import com.vitaly.locoporlapizza.presentation.details.DetailsFragmentViewModel
-import com.vitaly.locoporlapizza.presentation.main.MainFragmentViewModel
-import com.vitaly.locoporlapizza.presentation.preview.PreviewFragmentViewModel
+import com.vitaly.presentation.cart.CartFragmentViewModel
+import com.vitaly.presentation.details.DetailsFragmentViewModel
+import com.vitaly.presentation.main.MainFragmentViewModel
+import com.vitaly.presentation.preview.PreviewFragmentViewModel
 import dagger.Binds
 import dagger.MapKey
 import dagger.Module

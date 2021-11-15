@@ -3,14 +3,14 @@ package com.vitaly.locoporlapizza.di.modules
 import android.content.Context
 import androidx.room.Room
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
-import com.vitaly.locoporlapizza.data.db.PizzaDao
-import com.vitaly.locoporlapizza.data.db.PizzaDataBase
-import com.vitaly.locoporlapizza.data.RepositoryImpl
-import com.vitaly.locoporlapizza.data.network.PizzaApi
+import com.vitaly.data.db.PizzaDao
+import com.vitaly.data.db.PizzaDataBase
+import com.vitaly.data.RepositoryImpl
+import com.vitaly.data.network.PizzaApi
 import com.vitaly.locoporlapizza.di.App
-import com.vitaly.locoporlapizza.domain.interactors.CartInteractor
-import com.vitaly.locoporlapizza.domain.interactors.DetailsAndPreviewInteractor
-import com.vitaly.locoporlapizza.domain.interactors.MainInteractor
+import com.vitaly.domain.interactors.CartInteractor
+import com.vitaly.domain.interactors.DetailsAndPreviewInteractor
+import com.vitaly.domain.interactors.MainInteractor
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -64,6 +64,7 @@ class AppModule {
     fun provideRepository(pizzaApi: PizzaApi, pizzaDao: PizzaDao): RepositoryImpl {
         return RepositoryImpl(pizzaApi, pizzaDao)
     }
+
 
     @Singleton
     @Provides

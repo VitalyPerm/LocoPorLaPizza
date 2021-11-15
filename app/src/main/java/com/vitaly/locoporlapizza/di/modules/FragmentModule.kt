@@ -1,10 +1,10 @@
 package com.vitaly.locoporlapizza.di.modules
 
-import com.vitaly.locoporlapizza.presentation.EndFragment
-import com.vitaly.locoporlapizza.presentation.cart.CartFragment
-import com.vitaly.locoporlapizza.presentation.details.DetailsDialogFragment
-import com.vitaly.locoporlapizza.presentation.main.MainFragment
-import com.vitaly.locoporlapizza.presentation.preview.PreviewFragment
+import com.vitaly.presentation.EndFragment
+import com.vitaly.presentation.cart.CartFragment
+import com.vitaly.presentation.details.DetailsDialogFragment
+import com.vitaly.presentation.main.MainFragment
+import com.vitaly.presentation.preview.PreviewFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
