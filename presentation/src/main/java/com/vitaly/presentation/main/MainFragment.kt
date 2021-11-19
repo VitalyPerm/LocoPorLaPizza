@@ -2,11 +2,10 @@ package com.vitaly.presentation.main
 
 import android.app.Activity
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.OnBackPressedCallback
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +15,10 @@ import com.vitaly.presentation.R
 import com.vitaly.presentation.cart.CartFragment
 import com.vitaly.presentation.databinding.FragmentMainBinding
 import com.vitaly.presentation.details.DetailsDialogFragment
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::inflate) {
@@ -43,7 +45,13 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
                 binding.etSearch.requestFocus()
                 setKeyboardVisibility(true)
             }
-            etSearch.addTextChangedListener(rvFilter)
+            etSearch.doAfterTextChanged {
+                adapter.filter.filter(it)
+                if (it?.length == 0) {
+                    showHideToolBar(false)
+                    setKeyboardVisibility(false)
+                }
+            }
         }
         recyclerView.adapter = adapter
         setUpOnBackPressed()
@@ -108,23 +116,15 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     if (binding.cvSearchBar.visibility == View.VISIBLE) {
-                        binding.etSearch.setText("")
+                        binding.etSearch.text.clear()
+                        disposable.add(
+                            Completable.timer(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                                .subscribe { binding.rv.scrollToPosition(0) }
+                        )
                         showHideToolBar(false)
                     } else requireActivity().onBackPressed()
                 }
             })
-    }
-
-    private val rvFilter = object : TextWatcher {
-        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-        override fun afterTextChanged(p0: Editable?) {
-            adapter.filter.filter(p0)
-            if (p0?.length == 0) {
-                showHideToolBar(false)
-                setKeyboardVisibility(false)
-            }
-        }
     }
 
     override fun onDestroyView() {

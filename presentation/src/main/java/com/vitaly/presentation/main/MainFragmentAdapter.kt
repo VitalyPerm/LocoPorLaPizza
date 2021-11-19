@@ -1,7 +1,6 @@
 package com.vitaly.presentation.main
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
@@ -10,24 +9,18 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.vitaly.domain.models.PizzaEntity
 import com.vitaly.presentation.R
-import com.vitaly.presentation.databinding.ItemFragmentMainBinding
 import com.vitaly.presentation.utils.loadPicture
 
 class MainFragmentAdapter(
     private val progressDrawable: CircularProgressDrawable,
     private val onClick: (Int) -> Unit
 ) :
-    RecyclerView.Adapter<MainFragmentAdapter.MainFragmentViewHolder>(), Filterable {
+    RecyclerView.Adapter<MainFragmentViewHolder>(), Filterable {
     //Отфильтрованный лист
     private var pizzaList = mutableListOf<PizzaEntity>()
 
     // Лист пицц c сервера при запуске приложения
     var pizzaStartList = emptyList<PizzaEntity>()
-
-
-    inner class MainFragmentViewHolder(item: View) : RecyclerView.ViewHolder(item) {
-        val binding = ItemFragmentMainBinding.bind(item)
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainFragmentViewHolder {
         return MainFragmentViewHolder(
@@ -82,20 +75,5 @@ class MainFragmentAdapter(
                 setList(pizzaFilterList)
             }
         }
-    }
-}
-
-class MainFragmentDiffUtil(
-    private val oldList: List<PizzaEntity>,
-    private val newList: List<PizzaEntity>
-) : DiffUtil.Callback() {
-    override fun getOldListSize(): Int = oldList.size
-    override fun getNewListSize(): Int = newList.size
-    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldList[oldItemPosition].id == newList[newItemPosition].id
-    }
-
-    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldList[oldItemPosition] == newList[newItemPosition]
     }
 }

@@ -1,22 +1,17 @@
 package com.vitaly.presentation.preview
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.vitaly.presentation.R
-import com.vitaly.presentation.databinding.ItemPreviewFragmentBinding
 import com.vitaly.presentation.utils.loadPicture
 
 class PreviewFragmentAdapter(
     private val progressDrawable: CircularProgressDrawable,
     private var images: List<String>
-) : RecyclerView.Adapter<PreviewFragmentAdapter.PagerViewHolder>() {
+) : RecyclerView.Adapter<PagerViewHolder>() {
 
-    inner class PagerViewHolder(item: View) : RecyclerView.ViewHolder(item) {
-        val binding = ItemPreviewFragmentBinding.bind(item)
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagerViewHolder {
         val view = LayoutInflater.from(parent.context)

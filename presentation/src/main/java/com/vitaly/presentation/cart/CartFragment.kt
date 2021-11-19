@@ -9,8 +9,8 @@ import com.vitaly.domain.models.PizzaEntity
 import com.vitaly.presentation.BaseFragment
 import com.vitaly.presentation.EndFragment
 import com.vitaly.presentation.R
-
 import com.vitaly.presentation.databinding.FragmentCartBinding
+import com.vitaly.presentation.main.MainFragment
 import com.vitaly.presentation.utils.prepareOrderEntity
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import javax.inject.Inject
@@ -35,22 +35,22 @@ class CartFragment : BaseFragment<FragmentCartBinding>(FragmentCartBinding::infl
         disposable.add(
             viewModel.pizzasListFromDb.subscribe { pizzaList ->
                 val filteredList = pizzaList.filter { it.quantity > 0 }
-
+                if (filteredList.isEmpty()) {
+                    replaceFragment(MainFragment())
+                    clearBackStack()
+                }
                 adapter.setList(filteredList)
                 getPriceOfAllPizzas(filteredList)
-                for(i in filteredList){
+                for (i in filteredList) {
                     viewModel.pizzaListToSend.add(prepareOrderEntity(i))
                 }
 
             }
         )
-        binding.buttonClear.setOnClickListener {
-            viewModel.clear()
-
-        }
+        binding.buttonClear.setOnClickListener { viewModel.clear() }
         binding.checkout.setOnClickListener {
             viewModel.sendOrder()
-                viewModel.clear()
+            viewModel.clear()
             replaceFragment(EndFragment())
         }
     }

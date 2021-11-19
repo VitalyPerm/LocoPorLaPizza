@@ -1,23 +1,17 @@
 package com.vitaly.presentation.cart
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.vitaly.domain.models.PizzaEntity
 import com.vitaly.presentation.R
-import com.vitaly.presentation.databinding.ItemCartBinding
 import com.vitaly.presentation.utils.editPizzaQuantity
 
 class CartFragmentAdapter(private val editPizzaQuantityListener: (PizzaEntity) -> Unit) :
-    RecyclerView.Adapter<CartFragmentAdapter.CartFragmentViewHolder>() {
+    RecyclerView.Adapter<CartFragmentViewHolder>() {
     private var pizzaList = mutableListOf<PizzaEntity>()
-
-    inner class CartFragmentViewHolder(item: View) : RecyclerView.ViewHolder(item) {
-        val binding = ItemCartBinding.bind(item)
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartFragmentViewHolder {
         return CartFragmentViewHolder(
@@ -59,20 +53,5 @@ class CartFragmentAdapter(private val editPizzaQuantityListener: (PizzaEntity) -
         this.pizzaList.clear()
         this.pizzaList.addAll(pizzaList)
         diffResult.dispatchUpdatesTo(this)
-    }
-}
-
-class CartFragmentDiffUtil(
-    private val oldList: List<PizzaEntity>,
-    private val newList: List<PizzaEntity>
-) : DiffUtil.Callback() {
-    override fun getOldListSize(): Int = oldList.size
-    override fun getNewListSize(): Int = newList.size
-    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldList[oldItemPosition].name == newList[newItemPosition].name
-    }
-
-    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldList[oldItemPosition] == newList[newItemPosition]
     }
 }
