@@ -7,7 +7,7 @@ import android.widget.Filterable
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
-import com.vitaly.domain.models.PizzaEntity
+import com.vitaly.domain.models.Pizza
 import com.vitaly.presentation.R
 import com.vitaly.presentation.utils.loadPicture
 
@@ -17,10 +17,10 @@ class MainFragmentAdapter(
 ) :
     RecyclerView.Adapter<MainFragmentViewHolder>(), Filterable {
     //Отфильтрованный лист
-    private var pizzaList = mutableListOf<PizzaEntity>()
+    private var pizzaList = mutableListOf<Pizza>()
 
     // Лист пицц c сервера при запуске приложения
-    var pizzaStartList = emptyList<PizzaEntity>()
+    var pizzaStartList = emptyList<Pizza>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainFragmentViewHolder {
         return MainFragmentViewHolder(
@@ -43,7 +43,7 @@ class MainFragmentAdapter(
 
     override fun getItemCount(): Int = pizzaList.size
 
-    fun setList(pizzaList: List<PizzaEntity>) {
+    fun setList(pizzaList: List<Pizza>) {
         val diffCallback = MainFragmentDiffUtil(this.pizzaList, pizzaList)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
         this.pizzaList.clear()
@@ -52,14 +52,14 @@ class MainFragmentAdapter(
     }
 
     override fun getFilter(): Filter {
-        var pizzaFilterList: MutableList<PizzaEntity>
+        var pizzaFilterList: MutableList<Pizza>
         return object : Filter() {
             override fun performFiltering(p0: CharSequence?): FilterResults {
                 val pizzaChar = p0.toString().lowercase()
                 pizzaFilterList = if (pizzaChar.isEmpty()) {
                     pizzaStartList.toMutableList()
                 } else {
-                    val resultList = mutableListOf<PizzaEntity>()
+                    val resultList = mutableListOf<Pizza>()
                     pizzaStartList.forEach {
                         if (it.name.lowercase().contains(pizzaChar)) resultList.add(it)
                     }
@@ -71,7 +71,7 @@ class MainFragmentAdapter(
             }
 
             override fun publishResults(p0: CharSequence?, p1: FilterResults?) {
-                pizzaFilterList = p1?.values as MutableList<PizzaEntity>
+                pizzaFilterList = p1?.values as MutableList<Pizza>
                 setList(pizzaFilterList)
             }
         }

@@ -9,7 +9,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import com.vitaly.domain.models.PizzaEntity
+import com.vitaly.domain.models.Pizza
 import com.vitaly.presentation.BaseFragment
 import com.vitaly.presentation.R
 import com.vitaly.presentation.cart.CartFragment
@@ -65,7 +65,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
         )
     }
 
-    private fun getPriceOfAllPizzas(list: List<PizzaEntity>) {
+    private fun getPriceOfAllPizzas(list: List<Pizza>) {
         var price = 0
         for (i in list.indices) {
             price += (list[i].price.toInt() * list[i].quantity)

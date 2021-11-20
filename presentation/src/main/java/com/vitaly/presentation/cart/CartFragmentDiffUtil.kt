@@ -1,12 +1,13 @@
 package com.vitaly.presentation.cart
 
 import androidx.recyclerview.widget.DiffUtil
-import com.vitaly.domain.models.PizzaEntity
+import com.vitaly.data.db.PizzaEntity
+import com.vitaly.domain.models.Pizza
 
 
 class CartFragmentDiffUtil(
-    private val oldList: List<PizzaEntity>,
-    private val newList: List<PizzaEntity>
+    private val oldList: List<Pizza>,
+    private val newList: List<Pizza>
 ) : DiffUtil.Callback() {
     override fun getOldListSize(): Int = oldList.size
     override fun getNewListSize(): Int = newList.size

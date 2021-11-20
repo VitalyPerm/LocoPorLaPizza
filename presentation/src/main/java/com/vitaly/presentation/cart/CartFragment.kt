@@ -5,13 +5,13 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import com.vitaly.domain.models.PizzaEntity
+import com.vitaly.domain.models.Pizza
+import com.vitaly.domain.models.PizzaOrder
 import com.vitaly.presentation.BaseFragment
 import com.vitaly.presentation.EndFragment
 import com.vitaly.presentation.R
 import com.vitaly.presentation.databinding.FragmentCartBinding
 import com.vitaly.presentation.main.MainFragment
-import com.vitaly.presentation.utils.prepareOrderEntity
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import javax.inject.Inject
 
@@ -42,9 +42,8 @@ class CartFragment : BaseFragment<FragmentCartBinding>(FragmentCartBinding::infl
                 adapter.setList(filteredList)
                 getPriceOfAllPizzas(filteredList)
                 for (i in filteredList) {
-                    viewModel.pizzaListToSend.add(prepareOrderEntity(i))
+                    viewModel.pizzaListToSend.add(PizzaOrder(i.id, i.quantity))
                 }
-
             }
         )
         binding.buttonClear.setOnClickListener { viewModel.clear() }
@@ -55,7 +54,7 @@ class CartFragment : BaseFragment<FragmentCartBinding>(FragmentCartBinding::infl
         }
     }
 
-    private fun getPriceOfAllPizzas(list: List<PizzaEntity>) {
+    private fun getPriceOfAllPizzas(list: List<Pizza>) {
         var price = 0
         for (i in list.indices) {
             price += (list[i].price.toInt() * list[i].quantity)

@@ -2,9 +2,9 @@ package com.vitaly.presentation.preview
 
 import androidx.lifecycle.ViewModel
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
-import com.vitaly.domain.models.PizzaEntity
 import com.vitaly.domain.interactors.DetailsAndPreviewInteractor
-import com.vitaly.presentation.utils.addPizzaMapper
+import com.vitaly.domain.models.Pizza
+import com.vitaly.presentation.utils.editPizzaQuantity
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -16,7 +16,7 @@ class PreviewFragmentViewModel @Inject constructor(
     val progressBar: CircularProgressDrawable
 ) : ViewModel() {
     private val disposable = CompositeDisposable()
-    val selectedPizza: BehaviorSubject<PizzaEntity> = BehaviorSubject.create()
+    val selectedPizza: BehaviorSubject<Pizza> = BehaviorSubject.create()
 
     fun getPizzaById(id: Int) {
         disposable.add(
@@ -30,8 +30,8 @@ class PreviewFragmentViewModel @Inject constructor(
         )
     }
 
-    fun addPizza(pizza: PizzaEntity) {
-        interactor.addPizza(addPizzaMapper(pizza))
+    fun addPizza(pizza: Pizza) {
+        interactor.addPizza(editPizzaQuantity(pizza, true))
     }
 
     override fun onCleared() {

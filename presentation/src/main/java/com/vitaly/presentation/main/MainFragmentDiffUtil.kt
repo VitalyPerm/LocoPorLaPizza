@@ -1,11 +1,11 @@
 package com.vitaly.presentation.main
 
 import androidx.recyclerview.widget.DiffUtil
-import com.vitaly.domain.models.PizzaEntity
+import com.vitaly.domain.models.Pizza
 
 class MainFragmentDiffUtil(
-    private val oldList: List<PizzaEntity>,
-    private val newList: List<PizzaEntity>
+    private val oldList: List<Pizza>,
+    private val newList: List<Pizza>
 ) : DiffUtil.Callback() {
     override fun getOldListSize(): Int = oldList.size
     override fun getNewListSize(): Int = newList.size

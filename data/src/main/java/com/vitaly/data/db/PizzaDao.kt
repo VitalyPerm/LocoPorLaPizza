@@ -1,7 +1,6 @@
 package com.vitaly.data.db
 
 import androidx.room.*
-import com.vitaly.domain.models.PizzaEntity
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single

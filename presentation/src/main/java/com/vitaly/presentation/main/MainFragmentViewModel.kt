@@ -2,10 +2,8 @@ package com.vitaly.presentation.main
 
 import androidx.lifecycle.ViewModel
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
-import com.vitaly.domain.models.PizzaResponse
-import com.vitaly.domain.models.PizzaEntity
 import com.vitaly.domain.interactors.MainInteractor
-import com.vitaly.presentation.utils.pizzaMapper
+import com.vitaly.domain.models.Pizza
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -17,7 +15,7 @@ class MainFragmentViewModel @Inject constructor(
     private val interactor: MainInteractor, val progressBar: CircularProgressDrawable
 ) : ViewModel() {
     private val disposable = CompositeDisposable()
-    val pizzasListFromDb: PublishSubject<List<PizzaEntity>> = PublishSubject.create()
+    val pizzasListFromDb: PublishSubject<List<Pizza>> = PublishSubject.create()
 
     fun initDatabase() {
         getPizzaList()
@@ -43,7 +41,7 @@ class MainFragmentViewModel @Inject constructor(
             )
     }
 
-    private fun insert(pizza: PizzaResponse) {
-        interactor.insert(pizzaMapper(pizza))
+    private fun insert(pizza: Pizza) {
+        interactor.insert(pizza)
     }
 }

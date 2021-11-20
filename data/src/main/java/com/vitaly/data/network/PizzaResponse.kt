@@ -1,4 +1,4 @@
-package com.vitaly.domain.models
+package com.vitaly.data.network
 
 data class PizzaResponse(
     val id: Int,

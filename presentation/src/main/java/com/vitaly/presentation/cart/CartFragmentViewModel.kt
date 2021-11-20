@@ -1,9 +1,11 @@
 package com.vitaly.presentation.cart
 
 import androidx.lifecycle.ViewModel
-import com.vitaly.domain.models.PizzaOrderEntity
-import com.vitaly.domain.models.PizzaEntity
+import com.vitaly.data.network.PizzaOrderEntity
+import com.vitaly.data.db.PizzaEntity
 import com.vitaly.domain.interactors.CartInteractor
+import com.vitaly.domain.models.Pizza
+import com.vitaly.domain.models.PizzaOrder
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -14,8 +16,8 @@ class CartFragmentViewModel @Inject constructor(
     private val interactor: CartInteractor,
 ) : ViewModel() {
     private val disposable = CompositeDisposable()
-    val pizzasListFromDb: PublishSubject<List<PizzaEntity>> = PublishSubject.create()
-    var pizzaListToSend = mutableListOf<PizzaOrderEntity>()
+    val pizzasListFromDb: PublishSubject<List<Pizza>> = PublishSubject.create()
+    var pizzaListToSend = mutableListOf<PizzaOrder>()
 
     fun initDatabase() {
         disposable.add(
@@ -32,7 +34,7 @@ class CartFragmentViewModel @Inject constructor(
         interactor.clear()
     }
 
-    fun update(pizza: PizzaEntity) {
+    fun update(pizza: Pizza) {
         interactor.addPizza(pizza)
     }
 

@@ -1,7 +1,8 @@
-package com.vitaly.domain.models
+package com.vitaly.data.db
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.vitaly.domain.models.Pizza
 
 @Entity
 data class PizzaEntity(
@@ -12,4 +13,8 @@ data class PizzaEntity(
     val imageUrls: List<String>,
     val description: String,
     val quantity: Int,
-)
+){
+    fun toPizza(): Pizza {
+        return Pizza(id, name, price, imageUrls, description, quantity)
+    }
+}

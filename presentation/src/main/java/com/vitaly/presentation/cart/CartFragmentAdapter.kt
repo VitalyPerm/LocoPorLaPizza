@@ -5,13 +5,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.vitaly.domain.models.PizzaEntity
+import com.vitaly.data.db.PizzaEntity
+import com.vitaly.domain.models.Pizza
 import com.vitaly.presentation.R
 import com.vitaly.presentation.utils.editPizzaQuantity
 
-class CartFragmentAdapter(private val editPizzaQuantityListener: (PizzaEntity) -> Unit) :
+class CartFragmentAdapter(private val editPizzaQuantityListener: (Pizza) -> Unit) :
     RecyclerView.Adapter<CartFragmentViewHolder>() {
-    private var pizzaList = mutableListOf<PizzaEntity>()
+    private var pizzaList = mutableListOf<Pizza>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartFragmentViewHolder {
         return CartFragmentViewHolder(
@@ -47,7 +48,7 @@ class CartFragmentAdapter(private val editPizzaQuantityListener: (PizzaEntity) -
 
     override fun getItemCount(): Int = pizzaList.size
 
-    fun setList(pizzaList: List<PizzaEntity>) {
+    fun setList(pizzaList: List<Pizza>) {
         val diffCallback = CartFragmentDiffUtil(this.pizzaList, pizzaList)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
         this.pizzaList.clear()
