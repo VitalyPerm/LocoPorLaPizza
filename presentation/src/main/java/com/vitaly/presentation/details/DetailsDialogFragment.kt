@@ -17,13 +17,11 @@ import com.vitaly.presentation.R
 import com.vitaly.presentation.databinding.FragmentDetailsDialogBinding
 import com.vitaly.presentation.utils.loadPicture
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class DetailsDialogFragment : BottomSheetDialogFragment() {
-    private val disposable = CompositeDisposable()
     private val viewModel: DetailsFragmentViewModel by hiltNavGraphViewModels(R.id.nav_graph)
     private var _binding: FragmentDetailsDialogBinding? = null
     private val binding get() = _binding!!
@@ -95,7 +93,6 @@ class DetailsDialogFragment : BottomSheetDialogFragment() {
     }
 
     override fun onDestroy() {
-        disposable.clear()
         _binding = null
         super.onDestroy()
     }

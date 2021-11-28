@@ -19,17 +19,15 @@ import com.vitaly.presentation.R
 import com.vitaly.presentation.databinding.FragmentMainBinding
 import com.vitaly.presentation.details.DetailsDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class MainFragment : Fragment() {
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
     private val viewModel: MainFragmentViewModel by hiltNavGraphViewModels(R.id.nav_graph)
+    private var job: Job? = null
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: MainFragmentAdapter
 
@@ -48,9 +46,6 @@ class MainFragment : Fragment() {
         adapter = MainFragmentAdapter(viewModel.progressBar) { setUpDialog(it) }
         with(binding) {
             recyclerView = rv
-            btnCheckout.setOnClickListener {
-                findNavController().navigate(R.id.action_mainFragment_to_cartFragment)
-            }
             buttonOpenSearch.setOnClickListener {
                 showHideToolBar(true)
                 binding.etSearch.requestFocus()
@@ -67,13 +62,16 @@ class MainFragment : Fragment() {
         recyclerView.adapter = adapter
         setUpOnBackPressed()
         viewModel.initDatabase()
-        lifecycleScope.launch {
+        job = lifecycleScope.launch {
             viewModel.pizzaList.collect {
-                Log.d("CHECK___" , "flow list called")
                 adapter.pizzaStartList = it
                 adapter.setList(it)
                 getPriceOfAllPizzas(it)
             }
+        }
+        binding.btnCheckout.setOnClickListener {
+            this.findNavController().navigate(R.id.action_mainFragment_to_cartFragment)
+
         }
     }
 
@@ -142,7 +140,7 @@ class MainFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-      //  _binding = null
+        job = null
         super.onDestroyView()
     }
 

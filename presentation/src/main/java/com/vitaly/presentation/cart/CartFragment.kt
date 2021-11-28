@@ -9,6 +9,7 @@ import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.vitaly.domain.models.Pizza
 import com.vitaly.domain.models.PizzaOrder
 import com.vitaly.presentation.R
@@ -17,21 +18,14 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class CartFragment : Fragment() {
-    private var _binding: FragmentCartBinding? = null
-    private val binding get() = _binding!!
+class CartFragment : Fragment(R.layout.fragment_cart) {
+    private val binding by viewBinding(FragmentCartBinding::bind)
     private val viewModel: CartFragmentViewModel by hiltNavGraphViewModels(R.id.nav_graph)
-    private val disposable = CompositeDisposable()
     private lateinit var adapter: CartFragmentAdapter
     private lateinit var recyclerView: RecyclerView
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initialization()
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        _binding = FragmentCartBinding.inflate(layoutInflater, container, false)
-        return binding.root
     }
 
     private fun initialization() {
@@ -42,11 +36,11 @@ class CartFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.allDataFromDb.collect {
                 val filteredList = it.filter { it.quantity > 0 }
-                if (filteredList.isEmpty()) {
-                    findNavController().navigate(R.id.action_cartFragment_to_mainFragment)
-                }
                 adapter.setList(filteredList)
                 getPriceOfAllPizzas(filteredList)
+//                if (filteredList.isEmpty()) {
+//                    findNavController().navigate(R.id.action_cartFragment_to_mainFragment)
+//                }
                 for (i in filteredList) {
                     viewModel.pizzaListToSend.add(PizzaOrder(i.id, i.quantity))
                 }
@@ -80,11 +74,5 @@ class CartFragment : Fragment() {
             price += (list[i].price.toInt() * list[i].quantity)
         }
         binding.tvPrice.text = getString(R.string.price, price)
-    }
-
-    override fun onDestroyView() {
-        _binding = null
-        disposable.clear()
-        super.onDestroyView()
     }
 }

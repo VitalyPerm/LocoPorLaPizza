@@ -1,40 +1,31 @@
 package com.vitaly.presentation.preview
 
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
-import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.vitaly.presentation.R
 import com.vitaly.presentation.databinding.FragmentPreviewBinding
 import com.vitaly.presentation.details.DetailsDialogFragment
-import com.vitaly.presentation.utils.loadPicture
-import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class PreviewFragment : Fragment(R.layout.fragment_preview) {
-    private val binding : FragmentPreviewBinding by viewBinding(createMethod = CreateMethod.INFLATE)
     private val viewModel: PreviewFragmentViewModel by hiltNavGraphViewModels(R.id.nav_graph)
     private var job: Job? = null
     private lateinit var adapter: PreviewFragmentAdapter
+    private val binding by viewBinding(FragmentPreviewBinding::bind)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initialize()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return binding.root
-    }
 
     private fun initialize() {
         viewModel.getPizzaById(arguments?.getInt(DetailsDialogFragment.PIZZA_ID) ?: 1)
@@ -47,11 +38,12 @@ class PreviewFragment : Fragment(R.layout.fragment_preview) {
                     adapter = PreviewFragmentAdapter(viewModel.progressBar, it.imageUrls)
                     vp2.adapter = adapter
                     price.text = getString(R.string.price, it.price.toInt())
-                    pizzaCount.text = getString(R.string.preview_pizza_count, binding.vp2.currentItem + 1, it.imageUrls.size)
+                    binding.vp2.registerOnPageChangeCallback(viewPagerListener)
+                   pizzaCount.text = getString(R.string.preview_pizza_count, binding.vp2.currentItem + 1, it.imageUrls.size)
                 }
             }
         }
-        binding.vp2.registerOnPageChangeCallback(viewPagerListener)
+
         binding.btnCheckout.setOnClickListener {
             setUpMainFragment()
         }
