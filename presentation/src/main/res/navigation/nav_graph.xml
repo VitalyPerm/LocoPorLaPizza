@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.vitaly.presentation.main.MainFragment"
+        android:label="MainFragment" >
+        <action
+            android:id="@+id/action_mainFragment_to_detailsDialogFragment"
+            app:destination="@id/detailsDialogFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_cartFragment"
+            app:destination="@id/cartFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_previewFragment"
+            app:destination="@id/previewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="com.vitaly.presentation.cart.CartFragment"
+        android:label="CartFragment" >
+        <action
+            android:id="@+id/action_cartFragment_to_endFragment"
+            app:destination="@id/endFragment" />
+        <action
+            android:id="@+id/action_cartFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailsDialogFragment"
+        android:name="com.vitaly.presentation.details.DetailsDialogFragment"
+        android:label="DetailsDialogFragment" />
+    <fragment
+        android:id="@+id/previewFragment"
+        android:name="com.vitaly.presentation.preview.PreviewFragment"
+        android:label="PreviewFragment" >
+        <action
+            android:id="@+id/action_previewFragment_to_detailsDialogFragment"
+            app:destination="@id/detailsDialogFragment" />
+        <action
+            android:id="@+id/action_previewFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/endFragment"
+        android:name="com.vitaly.presentation.EndFragment"
+        android:label="EndFragment" >
+        <action
+            android:id="@+id/action_endFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+</navigation>

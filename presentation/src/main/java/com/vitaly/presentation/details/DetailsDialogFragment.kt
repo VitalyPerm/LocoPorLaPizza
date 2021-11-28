@@ -7,24 +7,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.vitaly.presentation.preview.PreviewFragment
 import com.vitaly.presentation.R
 import com.vitaly.presentation.databinding.FragmentDetailsDialogBinding
 import com.vitaly.presentation.utils.loadPicture
-import dagger.android.support.AndroidSupportInjection
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import javax.inject.Inject
 
+@AndroidEntryPoint
 class DetailsDialogFragment : BottomSheetDialogFragment() {
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
     private val disposable = CompositeDisposable()
-    private val viewModel: DetailsFragmentViewModel by viewModels { viewModelFactory }
+    private val viewModel: DetailsFragmentViewModel by hiltNavGraphViewModels(R.id.nav_graph)
     private var _binding: FragmentDetailsDialogBinding? = null
     private val binding get() = _binding!!
 
@@ -33,7 +30,6 @@ class DetailsDialogFragment : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        AndroidSupportInjection.inject(this)
         _binding = FragmentDetailsDialogBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
@@ -74,15 +70,10 @@ class DetailsDialogFragment : BottomSheetDialogFragment() {
     }
 
     private fun preparePreviewFragment() {
-        val previewFragment = PreviewFragment()
-        previewFragment.arguments = Bundle(1).apply {
+        val bundle =  Bundle(1).apply {
             putInt(PIZZA_ID, arguments?.getInt(PIZZA_ID) ?: 1)
         }
-        parentFragmentManager
-            .beginTransaction()
-            .replace(R.id.root_container, previewFragment)
-            .addToBackStack(null)
-            .commit()
+        findNavController().navigate(R.id.action_mainFragment_to_previewFragment, bundle)
         dismiss()
     }
 

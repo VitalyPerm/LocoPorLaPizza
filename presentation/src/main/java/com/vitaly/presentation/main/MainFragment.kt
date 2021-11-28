@@ -2,32 +2,41 @@ package com.vitaly.presentation.main
 
 import android.app.Activity
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.vitaly.domain.models.Pizza
-import com.vitaly.presentation.BaseFragment
 import com.vitaly.presentation.R
-import com.vitaly.presentation.cart.CartFragment
 import com.vitaly.presentation.databinding.FragmentMainBinding
 import com.vitaly.presentation.details.DetailsDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
-class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::inflate) {
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+@AndroidEntryPoint
+class MainFragment : Fragment(){
+    private var _binding: FragmentMainBinding? = null
+    private val binding get() = _binding!!
     private val disposable = CompositeDisposable()
-    private val viewModel: MainFragmentViewModel by viewModels { viewModelFactory }
+    private val viewModel: MainFragmentViewModel by hiltNavGraphViewModels(R.id.nav_graph)
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: MainFragmentAdapter
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = FragmentMainBinding.inflate(layoutInflater, container, false)
+        return binding.root
+    }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -39,7 +48,10 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
         adapter = MainFragmentAdapter(viewModel.progressBar) { setUpDialog(it) }
         with(binding) {
             recyclerView = rv
-            btnCheckout.setOnClickListener { replaceFragment(CartFragment()) }
+            btnCheckout.setOnClickListener {
+                findNavController().navigate(R.id.action_mainFragment_to_cartFragment)
+             //   replaceFragment(CartFragment())
+            }
             buttonOpenSearch.setOnClickListener {
                 showHideToolBar(true)
                 binding.etSearch.requestFocus()
@@ -129,6 +141,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
 
     override fun onDestroyView() {
         disposable.clear()
+        _binding = null
         super.onDestroyView()
     }
 

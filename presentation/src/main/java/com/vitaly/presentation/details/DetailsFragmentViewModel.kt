@@ -5,12 +5,13 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.vitaly.domain.interactors.DetailsAndPreviewInteractor
 import com.vitaly.domain.models.Pizza
 import com.vitaly.presentation.utils.editPizzaQuantity
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import javax.inject.Inject
-
+@HiltViewModel
 class DetailsFragmentViewModel @Inject constructor(
     val progressBar: CircularProgressDrawable,
     private val interactor: DetailsAndPreviewInteractor

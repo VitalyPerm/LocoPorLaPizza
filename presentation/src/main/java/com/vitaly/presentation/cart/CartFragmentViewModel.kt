@@ -6,12 +6,13 @@ import com.vitaly.data.db.PizzaEntity
 import com.vitaly.domain.interactors.CartInteractor
 import com.vitaly.domain.models.Pizza
 import com.vitaly.domain.models.PizzaOrder
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.PublishSubject
 import javax.inject.Inject
-
+@HiltViewModel
 class CartFragmentViewModel @Inject constructor(
     private val interactor: CartInteractor,
 ) : ViewModel() {

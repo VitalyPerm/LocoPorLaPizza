@@ -1,28 +1,33 @@
 package com.vitaly.presentation.preview
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.Fragment
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
-import com.vitaly.presentation.BaseFragment
 import com.vitaly.presentation.R
 import com.vitaly.presentation.databinding.FragmentPreviewBinding
 import com.vitaly.presentation.details.DetailsDialogFragment
-import com.vitaly.presentation.main.MainFragment
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import javax.inject.Inject
 
-class PreviewFragment : BaseFragment<FragmentPreviewBinding>(FragmentPreviewBinding::inflate) {
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+class PreviewFragment : Fragment() {
+    private var _binding: FragmentPreviewBinding? = null
+    private val binding get() = _binding!!
     private val disposable = CompositeDisposable()
-    private val viewModel: PreviewFragmentViewModel by viewModels { viewModelFactory }
+    private val viewModel: PreviewFragmentViewModel by hiltNavGraphViewModels(R.id.nav_graph)
     private lateinit var adapter: PreviewFragmentAdapter
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initialize()
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = FragmentPreviewBinding.inflate(layoutInflater, container, false)
+        return binding.root
     }
 
     private fun initialize() {
@@ -58,11 +63,11 @@ class PreviewFragment : BaseFragment<FragmentPreviewBinding>(FragmentPreviewBind
 
     private fun setUpMainFragment() {
         viewModel.addPizza(viewModel.selectedPizza.value)
-        replaceFragment(MainFragment())
+        findNavController().navigate(R.id.action_previewFragment_to_mainFragment)
     }
 
     private fun setUpDetailsDialog() {
-        replaceFragment(MainFragment())
+        findNavController().navigate(R.id.action_previewFragment_to_mainFragment)
         val detailsDialogFragment = DetailsDialogFragment()
         detailsDialogFragment.arguments = Bundle(1).apply {
             putInt(PIZZA_ID, arguments?.getInt(PIZZA_ID) ?: 1)
@@ -83,6 +88,7 @@ class PreviewFragment : BaseFragment<FragmentPreviewBinding>(FragmentPreviewBind
 
     override fun onDestroyView() {
         disposable.clear()
+        _binding = null
         binding.vp2.unregisterOnPageChangeCallback(viewPagerListener)
         super.onDestroyView()
     }

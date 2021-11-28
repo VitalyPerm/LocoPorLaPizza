@@ -4,13 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.vitaly.domain.interactors.MainInteractor
 import com.vitaly.domain.models.Pizza
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.PublishSubject
 import javax.inject.Inject
 
-
+@HiltViewModel
 class MainFragmentViewModel @Inject constructor(
     private val interactor: MainInteractor, val progressBar: CircularProgressDrawable
 ) : ViewModel() {
