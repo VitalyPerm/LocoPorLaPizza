@@ -12,11 +12,11 @@ class CartInteractor(private val repository: PizzaRepository) {
         return repository.getAllFromDb()
     }
 
-    suspend fun clear() {
+    fun clear() {
         repository.clear()
     }
 
-    suspend fun addPizza(pizza: Pizza) {
+    fun addPizza(pizza: Pizza) {
         repository.update(pizza)
     }
 

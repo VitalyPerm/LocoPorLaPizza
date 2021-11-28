@@ -22,7 +22,6 @@ import javax.inject.Inject
 class CartFragmentViewModel @Inject constructor(
     private val interactor: CartInteractor,
 ) : ViewModel() {
-    private val disposable = CompositeDisposable()
     var pizzaListToSend = mutableListOf<PizzaOrder>()
     var allDataFromDb = MutableStateFlow<List<Pizza>>(emptyList())
 
@@ -36,25 +35,16 @@ class CartFragmentViewModel @Inject constructor(
     }
 
     fun clear() {
-        viewModelScope.launch {
-            interactor.clear()
-        }
+        interactor.clear()
     }
 
     fun update(pizza: Pizza) {
-        viewModelScope.launch {
-            interactor.addPizza(pizza)
-        }
+        interactor.addPizza(pizza)
     }
 
     fun sendOrder() {
         viewModelScope.launch {
             interactor.sendOrder(pizzaListToSend)
         }
-    }
-
-    override fun onCleared() {
-        disposable.clear()
-        super.onCleared()
     }
 }

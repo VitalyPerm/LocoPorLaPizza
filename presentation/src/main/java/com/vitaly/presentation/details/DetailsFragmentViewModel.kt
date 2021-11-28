@@ -1,6 +1,5 @@
 package com.vitaly.presentation.details
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
@@ -8,8 +7,8 @@ import com.vitaly.domain.interactors.DetailsAndPreviewInteractor
 import com.vitaly.domain.models.Pizza
 import com.vitaly.presentation.utils.editPizzaQuantity
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

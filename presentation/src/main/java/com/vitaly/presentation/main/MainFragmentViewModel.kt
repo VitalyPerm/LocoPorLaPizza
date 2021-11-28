@@ -27,7 +27,6 @@ class MainFragmentViewModel @Inject constructor(
         getPizzaList()
         viewModelScope.launch {
             interactor.getAllFromDb().collect {
-                Log.d("CHECK___" , "flow db list  called")
                 _pizzaList.emit(it)
             }
         }
@@ -47,8 +46,6 @@ class MainFragmentViewModel @Inject constructor(
     }
 
     private fun insert(pizza: Pizza) {
-        viewModelScope.launch {
-            interactor.insert(pizza)
-        }
+        interactor.insert(pizza)
     }
 }

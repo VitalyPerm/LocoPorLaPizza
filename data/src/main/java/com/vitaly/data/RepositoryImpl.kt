@@ -1,14 +1,10 @@
 package com.vitaly.data
 
-import android.util.Log
 import com.vitaly.data.db.PizzaDao
 import com.vitaly.data.network.PizzaApi
 import com.vitaly.domain.PizzaRepository
 import com.vitaly.domain.models.Pizza
 import com.vitaly.domain.models.PizzaOrder
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
@@ -38,19 +34,22 @@ class RepositoryImpl @Inject constructor(
     }
 
 
-    override suspend fun insert(pizza: Pizza) {
-        pizzaDao.insert(mapSinglePizza(pizza))
+    override fun insert(pizza: Pizza) {
+        GlobalScope.launch {
+            pizzaDao.insert(mapSinglePizza(pizza))
+        }
     }
 
-    override suspend fun clear() {
-        pizzaDao.clear()
+    override fun clear() {
+        GlobalScope.launch {
+            pizzaDao.clear()
+        }
     }
 
     override fun update(pizza: Pizza) {
       GlobalScope.launch {
           pizzaDao.update(mapSinglePizza(pizza))
       }
-        Log.d(TAG, "updated")
     }
 
     companion object {

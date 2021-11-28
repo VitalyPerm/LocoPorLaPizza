@@ -10,7 +10,7 @@ interface PizzaRepository {
     suspend fun sendOrder(pizzas: List<PizzaOrder>)
     fun getAllFromDb(): Flow<List<Pizza>>
     suspend fun getPizzaById(id: Int): Pizza
-    suspend fun insert(pizza: Pizza)
-    suspend fun clear()
+    fun insert(pizza: Pizza)
+    fun clear()
     fun update(pizza: Pizza)
 }

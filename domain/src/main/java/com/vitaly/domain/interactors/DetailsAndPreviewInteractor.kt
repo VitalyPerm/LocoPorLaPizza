@@ -16,7 +16,7 @@ class DetailsAndPreviewInteractor(private val repository: PizzaRepository) {
         Log.d("CHECK___", "${pizza}")
     }
 
-    suspend fun getPizzaById(id: Int): Pizza  = withContext(Dispatchers.IO){
+    suspend fun getPizzaById(id: Int) = withContext(Dispatchers.IO){
         repository.getPizzaById(id)
     }
 

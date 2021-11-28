@@ -17,7 +17,7 @@ class MainInteractor (private val repository: PizzaRepository) {
         return repository.getAllFromDb()
     }
 
-    suspend fun insert(pizzaEntity: Pizza){
+     fun insert(pizzaEntity: Pizza){
         repository.insert(pizzaEntity)
     }
 }

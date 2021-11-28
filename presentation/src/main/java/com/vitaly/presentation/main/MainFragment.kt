@@ -142,7 +142,7 @@ class MainFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        _binding = null
+      //  _binding = null
         super.onDestroyView()
     }
 
