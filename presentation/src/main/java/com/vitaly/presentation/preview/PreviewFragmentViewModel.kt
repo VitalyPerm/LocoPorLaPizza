@@ -24,13 +24,13 @@ class PreviewFragmentViewModel @Inject constructor(
     private val disposable = CompositeDisposable()
     lateinit var selectedPizza: Pizza
 
-    fun getPizzaById(id: Int): Pizza {
-        viewModelScope.launch {
-            interactor.getPizzaById(id).collect {
-                selectedPizza = it
-            }
-        }
-        return selectedPizza
+    fun getPizzaById(id: Int) {
+//        viewModelScope.launch {
+//            interactor.getPizzaById(id).collect {
+//                selectedPizza = it
+//            }
+//        }
+//        return selectedPizza
     }
 
     fun addPizza(pizza: Pizza) {

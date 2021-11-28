@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -17,6 +18,8 @@ import com.vitaly.presentation.databinding.FragmentDetailsDialogBinding
 import com.vitaly.presentation.utils.loadPicture
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class DetailsDialogFragment : BottomSheetDialogFragment() {
@@ -52,14 +55,20 @@ class DetailsDialogFragment : BottomSheetDialogFragment() {
             ivPizza.setOnClickListener {
                 preparePreviewFragment()
             }
-            viewModel.getPizzaById(arguments?.getInt(PIZZA_ID) ?: 1).let {
-                ivPizza.loadPicture(it.imageUrls[0], viewModel.progressBar)
-                tvPizzaName.text = it.name
-                tvPizzaDesc.text = it.description
-                price.text = getString(R.string.price, it.price.toInt())
+            viewModel.getPizzaById(arguments?.getInt(PIZZA_ID) ?: 1)
+            lifecycleScope.launch {
+                viewModel.pizza.collect {
+                    ivPizza.loadPicture(it.imageUrls[0], viewModel.progressBar)
+                    tvPizzaName.text = it.name
+                    tvPizzaDesc.text = it.description
+                    price.text = getString(R.string.price, it.price.toInt())
+                }
             }
+
+
+
             checkout.setOnClickListener {
-                viewModel.addPizza(viewModel.selectedPizza)
+                viewModel.addPizza()
                 dismiss()
             }
         }

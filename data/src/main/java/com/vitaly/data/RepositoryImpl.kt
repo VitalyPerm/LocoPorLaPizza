@@ -9,8 +9,12 @@ import com.vitaly.domain.models.PizzaOrder
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class RepositoryImpl @Inject constructor(
@@ -29,9 +33,10 @@ class RepositoryImpl @Inject constructor(
         return pizzaDao.getAll().map { mapEntityToPizza(it) }
     }
 
-    override fun getPizzaById(id: Int): Flow<Pizza> {
-        return pizzaDao.getPizzaById(id).map { it.toPizza() }
+    override suspend fun getPizzaById(id: Int): Pizza = withContext(Dispatchers.IO){
+        pizzaDao.getPizzaById(id).toPizza()
     }
+
 
     override suspend fun insert(pizza: Pizza) {
         pizzaDao.insert(mapSinglePizza(pizza))
@@ -41,8 +46,11 @@ class RepositoryImpl @Inject constructor(
         pizzaDao.clear()
     }
 
-    override suspend fun update(pizza: Pizza) {
-        pizzaDao.update(mapSinglePizza(pizza))
+    override fun update(pizza: Pizza) {
+      GlobalScope.launch {
+          pizzaDao.update(mapSinglePizza(pizza))
+      }
+        Log.d(TAG, "updated")
     }
 
     companion object {

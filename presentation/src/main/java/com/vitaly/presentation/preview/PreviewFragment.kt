@@ -31,18 +31,18 @@ class PreviewFragment : Fragment() {
     }
 
     private fun initialize() {
-        viewModel.getPizzaById(arguments?.getInt(PIZZA_ID) ?: 1).let {
-                adapter =
-                    PreviewFragmentAdapter(viewModel.progressBar, it.imageUrls)
-                with(binding) {
-                    pizzaName.text = it.name
-                    price.text =
-                        getString(R.string.price, it.price.toInt())
-                    vp2.adapter = adapter
-                    vp2.registerOnPageChangeCallback(viewPagerListener)
-                }
-
-        }
+//        viewModel.getPizzaById(arguments?.getInt(PIZZA_ID) ?: 1).let {
+//                adapter =
+//                    PreviewFragmentAdapter(viewModel.progressBar, it.imageUrls)
+//                with(binding) {
+//                    pizzaName.text = it.name
+//                    price.text =
+//                        getString(R.string.price, it.price.toInt())
+//                    vp2.adapter = adapter
+//                    vp2.registerOnPageChangeCallback(viewPagerListener)
+//                }
+//
+//        }
 //        disposable.add(
 //            viewModel.selectedPizza.subscribe {
 //                adapter =

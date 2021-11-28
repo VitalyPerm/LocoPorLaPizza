@@ -12,7 +12,7 @@ interface PizzaDao {
     fun getAll(): Flow<List<PizzaEntity>>
 
     @Query("SELECT * FROM PizzaEntity where id=:id")
-    fun getPizzaById(id: Int): Flow<PizzaEntity>
+    fun getPizzaById(id: Int): PizzaEntity
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(pic: PizzaEntity)

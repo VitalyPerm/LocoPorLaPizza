@@ -68,7 +68,8 @@ class MainFragment : Fragment() {
         setUpOnBackPressed()
         viewModel.initDatabase()
         lifecycleScope.launch {
-            viewModel.allDataFromDb.collect {
+            viewModel.pizzaList.collect {
+                Log.d("CHECK___" , "flow list called")
                 adapter.pizzaStartList = it
                 adapter.setList(it)
                 getPriceOfAllPizzas(it)
