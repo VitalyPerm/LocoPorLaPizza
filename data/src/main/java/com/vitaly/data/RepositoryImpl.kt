@@ -9,49 +9,40 @@ import com.vitaly.domain.models.PizzaOrder
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class RepositoryImpl @Inject constructor(
     private val pizzaApi: PizzaApi,
     private val pizzaDao: PizzaDao,
 ) : PizzaRepository {
-    override fun getAllFromServer(): Single<List<Pizza>> {
-        return pizzaApi.getAll().map { mapResponseToPizza(it) }
+    override suspend fun getAllFromServer(): List<Pizza> {
+        return mapResponseToPizza(pizzaApi.getAll())
     }
 
-    override fun sendOrder(pizzas: List<PizzaOrder>) {
-        pizzaApi.sendOrder(mapOrder(pizzas)).observeOn(Schedulers.io()).subscribe({
-            Log.d(TAG, "Order sent $pizzas")
-        }, { it.printStackTrace() })
+    override suspend fun sendOrder(pizzas: List<PizzaOrder>) {
+        pizzaApi.sendOrder(mapOrder(pizzas))
     }
 
-    override fun getAllFromDb(): Observable<List<Pizza>> {
+    override fun getAllFromDb(): Flow<List<Pizza>> {
         return pizzaDao.getAll().map { mapEntityToPizza(it) }
     }
 
-    override fun getPizzaById(id: Int): Single<Pizza> {
+    override fun getPizzaById(id: Int): Flow<Pizza> {
         return pizzaDao.getPizzaById(id).map { it.toPizza() }
     }
 
-    override fun insert(pizza: Pizza) {
-        pizzaDao.insert(mapSinglePizza(pizza)).subscribeOn(Schedulers.io())
-            .subscribe({
-                Log.d(TAG, "Pizza inserted")
-            }, { it.printStackTrace() })
+    override suspend fun insert(pizza: Pizza) {
+        pizzaDao.insert(mapSinglePizza(pizza))
     }
 
-    override fun clear() {
-        pizzaDao.clear().subscribeOn(Schedulers.io())
-            .subscribe({
-                Log.d(TAG, "cart cleared")
-            }, { it.printStackTrace() })
+    override suspend fun clear() {
+        pizzaDao.clear()
     }
 
-    override fun update(pizza: Pizza) {
-        pizzaDao.update(mapSinglePizza(pizza)).subscribeOn(Schedulers.io())
-            .subscribe({
-                Log.d(TAG, "Pizza added")
-            }, { it.printStackTrace() })
+    override suspend fun update(pizza: Pizza) {
+        pizzaDao.update(mapSinglePizza(pizza))
     }
 
     companion object {

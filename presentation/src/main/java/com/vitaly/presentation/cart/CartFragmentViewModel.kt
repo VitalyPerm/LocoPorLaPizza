@@ -1,6 +1,7 @@
 package com.vitaly.presentation.cart
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.vitaly.data.network.PizzaOrderEntity
 import com.vitaly.data.db.PizzaEntity
 import com.vitaly.domain.interactors.CartInteractor
@@ -11,36 +12,45 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.PublishSubject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 @HiltViewModel
 class CartFragmentViewModel @Inject constructor(
     private val interactor: CartInteractor,
 ) : ViewModel() {
     private val disposable = CompositeDisposable()
-    val pizzasListFromDb: PublishSubject<List<Pizza>> = PublishSubject.create()
     var pizzaListToSend = mutableListOf<PizzaOrder>()
+    var allDataFromDb = MutableStateFlow<List<Pizza>>(emptyList())
 
     fun initDatabase() {
-        disposable.add(
-            interactor.getAllFromDb().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext { pizzasListFromDb.onNext(it) }
-                .doOnComplete { pizzasListFromDb.onComplete() }
-                .doOnError { it.printStackTrace() }
-                .subscribe()
-        )
+        viewModelScope.launch {
+            interactor.getAllFromDb().collect {
+                allDataFromDb.emit(it)
+            }
+        }
+
     }
 
     fun clear() {
-        interactor.clear()
+        viewModelScope.launch {
+            interactor.clear()
+        }
     }
 
     fun update(pizza: Pizza) {
-        interactor.addPizza(pizza)
+        viewModelScope.launch {
+            interactor.addPizza(pizza)
+        }
     }
 
     fun sendOrder() {
-        interactor.sendOrder(pizzaListToSend)
+        viewModelScope.launch {
+            interactor.sendOrder(pizzaListToSend)
+        }
     }
 
     override fun onCleared() {

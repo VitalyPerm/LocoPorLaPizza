@@ -31,9 +31,7 @@ class PreviewFragment : Fragment() {
     }
 
     private fun initialize() {
-        viewModel.getPizzaById(arguments?.getInt(PIZZA_ID) ?: 1)
-        disposable.add(
-            viewModel.selectedPizza.subscribe {
+        viewModel.getPizzaById(arguments?.getInt(PIZZA_ID) ?: 1).let {
                 adapter =
                     PreviewFragmentAdapter(viewModel.progressBar, it.imageUrls)
                 with(binding) {
@@ -43,8 +41,21 @@ class PreviewFragment : Fragment() {
                     vp2.adapter = adapter
                     vp2.registerOnPageChangeCallback(viewPagerListener)
                 }
-            }
-        )
+
+        }
+//        disposable.add(
+//            viewModel.selectedPizza.subscribe {
+//                adapter =
+//                    PreviewFragmentAdapter(viewModel.progressBar, it.imageUrls)
+//                with(binding) {
+//                    pizzaName.text = it.name
+//                    price.text =
+//                        getString(R.string.price, it.price.toInt())
+//                    vp2.adapter = adapter
+//                    vp2.registerOnPageChangeCallback(viewPagerListener)
+//                }
+//            }
+//        )
 
         binding.btnCheckout.setOnClickListener {
             setUpMainFragment()
@@ -62,7 +73,7 @@ class PreviewFragment : Fragment() {
     }
 
     private fun setUpMainFragment() {
-        viewModel.addPizza(viewModel.selectedPizza.value)
+        viewModel.selectedPizza?.let { viewModel.addPizza(it) }
         findNavController().navigate(R.id.action_previewFragment_to_mainFragment)
     }
 
@@ -80,7 +91,7 @@ class PreviewFragment : Fragment() {
             binding.pizzaCount.text = getString(
                 R.string.preview_pizza_count,
                 binding.vp2.currentItem + 1,
-                viewModel.selectedPizza.value.imageUrls.size
+                viewModel.selectedPizza.imageUrls.size
             )
             super.onPageSelected(position)
         }
@@ -88,8 +99,8 @@ class PreviewFragment : Fragment() {
 
     override fun onDestroyView() {
         disposable.clear()
-        _binding = null
         binding.vp2.unregisterOnPageChangeCallback(viewPagerListener)
+        _binding = null
         super.onDestroyView()
     }
 

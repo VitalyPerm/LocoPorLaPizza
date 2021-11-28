@@ -4,19 +4,20 @@ import com.vitaly.domain.PizzaRepository
 import com.vitaly.domain.models.Pizza
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
+import kotlinx.coroutines.flow.Flow
 
 
 class MainInteractor (private val repository: PizzaRepository) {
 
-    fun getAllFromServer(): Single<List<Pizza>> {
+   suspend fun getAllFromServer(): List<Pizza> {
         return repository.getAllFromServer()
     }
 
-     fun getAllFromDb(): Observable<List<Pizza>> {
+     fun getAllFromDb(): Flow<List<Pizza>> {
         return repository.getAllFromDb()
     }
 
-    fun insert(pizzaEntity: Pizza){
+    suspend fun insert(pizzaEntity: Pizza){
         repository.insert(pizzaEntity)
     }
 }

@@ -1,6 +1,7 @@
 package com.vitaly.presentation.preview
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.vitaly.domain.interactors.DetailsAndPreviewInteractor
 import com.vitaly.domain.models.Pizza
@@ -10,6 +11,9 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,22 +22,21 @@ class PreviewFragmentViewModel @Inject constructor(
     val progressBar: CircularProgressDrawable
 ) : ViewModel() {
     private val disposable = CompositeDisposable()
-    val selectedPizza: BehaviorSubject<Pizza> = BehaviorSubject.create()
+    lateinit var selectedPizza: Pizza
 
-    fun getPizzaById(id: Int) {
-        disposable.add(
-            interactor.getPizzaById(id).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    {
-                        selectedPizza.onNext(it)
-                    }, { it.printStackTrace() }
-                )
-        )
+    fun getPizzaById(id: Int): Pizza {
+        viewModelScope.launch {
+            interactor.getPizzaById(id).collect {
+                selectedPizza = it
+            }
+        }
+        return selectedPizza
     }
 
     fun addPizza(pizza: Pizza) {
-        interactor.addPizza(editPizzaQuantity(pizza, true))
+        viewModelScope.launch {
+            interactor.addPizza(editPizzaQuantity(pizza, true))
+        }
     }
 
     override fun onCleared() {

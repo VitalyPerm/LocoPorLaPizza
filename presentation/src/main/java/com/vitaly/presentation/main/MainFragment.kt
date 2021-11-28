@@ -2,6 +2,7 @@ package com.vitaly.presentation.main
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,9 +10,8 @@ import android.view.inputmethod.InputMethodManager
 import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.vitaly.domain.models.Pizza
@@ -19,16 +19,16 @@ import com.vitaly.presentation.R
 import com.vitaly.presentation.databinding.FragmentMainBinding
 import com.vitaly.presentation.details.DetailsDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
-class MainFragment : Fragment(){
+class MainFragment : Fragment() {
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
-    private val disposable = CompositeDisposable()
     private val viewModel: MainFragmentViewModel by hiltNavGraphViewModels(R.id.nav_graph)
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: MainFragmentAdapter
@@ -50,7 +50,6 @@ class MainFragment : Fragment(){
             recyclerView = rv
             btnCheckout.setOnClickListener {
                 findNavController().navigate(R.id.action_mainFragment_to_cartFragment)
-             //   replaceFragment(CartFragment())
             }
             buttonOpenSearch.setOnClickListener {
                 showHideToolBar(true)
@@ -68,13 +67,13 @@ class MainFragment : Fragment(){
         recyclerView.adapter = adapter
         setUpOnBackPressed()
         viewModel.initDatabase()
-        disposable.add(
-            viewModel.pizzasListFromDb.subscribe {
+        lifecycleScope.launch {
+            viewModel.allDataFromDb.collect {
                 adapter.pizzaStartList = it
                 adapter.setList(it)
                 getPriceOfAllPizzas(it)
             }
-        )
+        }
     }
 
     private fun getPriceOfAllPizzas(list: List<Pizza>) {
@@ -129,18 +128,19 @@ class MainFragment : Fragment(){
                 override fun handleOnBackPressed() {
                     if (binding.cvSearchBar.visibility == View.VISIBLE) {
                         binding.etSearch.text.clear()
-                        disposable.add(
-                            Completable.timer(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-                                .subscribe { binding.rv.scrollToPosition(0) }
-                        )
+                        lifecycleScope.launch {
+                            delay(200)
+                            withContext(Dispatchers.Main) {
+                                binding.rv.scrollToPosition(0)
+                            }
+                        }
                         showHideToolBar(false)
-                    } else requireActivity().onBackPressed()
+                    } else requireActivity().finish()
                 }
             })
     }
 
     override fun onDestroyView() {
-        disposable.clear()
         _binding = null
         super.onDestroyView()
     }

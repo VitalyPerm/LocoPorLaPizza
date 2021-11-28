@@ -4,21 +4,22 @@ import androidx.room.*
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PizzaDao {
     @Query("SELECT * FROM PizzaEntity")
-    fun getAll(): Observable<List<PizzaEntity>>
+    fun getAll(): Flow<List<PizzaEntity>>
 
     @Query("SELECT * FROM PizzaEntity where id=:id")
-    fun getPizzaById(id: Int): Single<PizzaEntity>
+    fun getPizzaById(id: Int): Flow<PizzaEntity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(pic: PizzaEntity): Completable
+    suspend fun insert(pic: PizzaEntity)
 
     @Query("DELETE FROM PizzaEntity")
-    fun clear(): Completable
+    suspend fun clear()
 
     @Update
-    fun update(pic: PizzaEntity): Completable
+    suspend fun update(pic: PizzaEntity)
 }

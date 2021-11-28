@@ -48,22 +48,18 @@ class DetailsDialogFragment : BottomSheetDialogFragment() {
     }
 
     private fun initialize() {
-        viewModel.getPizzaById(arguments?.getInt(PIZZA_ID) ?: 1)
         with(binding) {
             ivPizza.setOnClickListener {
                 preparePreviewFragment()
             }
-            disposable.add(
-                viewModel.selectedPizza.subscribe {
-                    ivPizza.loadPicture(it.imageUrls[0], viewModel.progressBar)
-                    tvPizzaName.text = it.name
-                    tvPizzaDesc.text = it.description
-                    price.text = getString(R.string.price, it.price.toInt())
-
-                }
-            )
+            viewModel.getPizzaById(arguments?.getInt(PIZZA_ID) ?: 1).let {
+                ivPizza.loadPicture(it.imageUrls[0], viewModel.progressBar)
+                tvPizzaName.text = it.name
+                tvPizzaDesc.text = it.description
+                price.text = getString(R.string.price, it.price.toInt())
+            }
             checkout.setOnClickListener {
-                viewModel.addPizza(viewModel.selectedPizza.value)
+                viewModel.addPizza(viewModel.selectedPizza)
                 dismiss()
             }
         }

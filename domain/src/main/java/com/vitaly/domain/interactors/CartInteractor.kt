@@ -4,22 +4,23 @@ import com.vitaly.domain.PizzaRepository
 import com.vitaly.domain.models.Pizza
 import com.vitaly.domain.models.PizzaOrder
 import io.reactivex.rxjava3.core.Observable
+import kotlinx.coroutines.flow.Flow
 
-class CartInteractor (private val repository: PizzaRepository) {
+class CartInteractor(private val repository: PizzaRepository) {
 
-    fun getAllFromDb(): Observable<List<Pizza>> {
+    fun getAllFromDb(): Flow<List<Pizza>> {
         return repository.getAllFromDb()
     }
 
-    fun clear() {
+    suspend fun clear() {
         repository.clear()
     }
 
-    fun addPizza(pizza: Pizza) {
+    suspend fun addPizza(pizza: Pizza) {
         repository.update(pizza)
     }
 
-    fun sendOrder(pizzas: List<PizzaOrder>) {
+    suspend fun sendOrder(pizzas: List<PizzaOrder>) {
         repository.sendOrder(pizzas)
     }
 }

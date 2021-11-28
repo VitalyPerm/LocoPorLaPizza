@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.vitaly.domain.models.Pizza
@@ -13,6 +14,8 @@ import com.vitaly.domain.models.PizzaOrder
 import com.vitaly.presentation.R
 import com.vitaly.presentation.databinding.FragmentCartBinding
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class CartFragment : Fragment() {
     private var _binding: FragmentCartBinding? = null
@@ -36,9 +39,9 @@ class CartFragment : Fragment() {
         recyclerView = binding.rv
         recyclerView.adapter = adapter
         viewModel.initDatabase()
-        disposable.add(
-            viewModel.pizzasListFromDb.subscribe { pizzaList ->
-                val filteredList = pizzaList.filter { it.quantity > 0 }
+        lifecycleScope.launch {
+            viewModel.allDataFromDb.collect {
+                val filteredList = it.filter { it.quantity > 0 }
                 if (filteredList.isEmpty()) {
                     findNavController().navigate(R.id.action_cartFragment_to_mainFragment)
                 }
@@ -48,7 +51,21 @@ class CartFragment : Fragment() {
                     viewModel.pizzaListToSend.add(PizzaOrder(i.id, i.quantity))
                 }
             }
-        )
+        }
+
+//        disposable.add(
+//            viewModel.pizzasListFromDb.subscribe { pizzaList ->
+//                val filteredList = pizzaList.filter { it.quantity > 0 }
+//                if (filteredList.isEmpty()) {
+//                    findNavController().navigate(R.id.action_cartFragment_to_mainFragment)
+//                }
+//                adapter.setList(filteredList)
+//                getPriceOfAllPizzas(filteredList)
+//                for (i in filteredList) {
+//                    viewModel.pizzaListToSend.add(PizzaOrder(i.id, i.quantity))
+//                }
+//            }
+//        )
         binding.buttonClear.setOnClickListener { viewModel.clear() }
         binding.checkout.setOnClickListener {
             viewModel.sendOrder()
