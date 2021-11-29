@@ -20,7 +20,7 @@ class CartInteractor(private val repository: PizzaRepository) {
         repository.update(pizza)
     }
 
-    suspend fun sendOrder(pizzas: List<PizzaOrder>) {
+    fun sendOrder(pizzas: List<PizzaOrder>) {
         repository.sendOrder(pizzas)
     }
 }

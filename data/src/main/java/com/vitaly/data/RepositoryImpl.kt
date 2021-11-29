@@ -21,15 +21,17 @@ class RepositoryImpl @Inject constructor(
         return mapResponseToPizza(pizzaApi.getAll())
     }
 
-    override suspend fun sendOrder(pizzas: List<PizzaOrder>) {
-        pizzaApi.sendOrder(mapOrder(pizzas))
+    override fun sendOrder(pizzas: List<PizzaOrder>) {
+        GlobalScope.launch {
+            pizzaApi.sendOrder(mapOrder(pizzas))
+        }
     }
 
     override fun getAllFromDb(): Flow<List<Pizza>> {
         return pizzaDao.getAll().map { mapEntityToPizza(it) }
     }
 
-    override suspend fun getPizzaById(id: Int): Pizza = withContext(Dispatchers.IO){
+    override suspend fun getPizzaById(id: Int): Pizza = withContext(Dispatchers.IO) {
         pizzaDao.getPizzaById(id).toPizza()
     }
 
@@ -47,12 +49,8 @@ class RepositoryImpl @Inject constructor(
     }
 
     override fun update(pizza: Pizza) {
-      GlobalScope.launch {
-          pizzaDao.update(mapSinglePizza(pizza))
-      }
-    }
-
-    companion object {
-        const val TAG = "REPOSITORY_LOG"
+        GlobalScope.launch {
+            pizzaDao.update(mapSinglePizza(pizza))
+        }
     }
 }

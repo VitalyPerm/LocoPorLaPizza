@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface PizzaRepository {
     suspend fun getAllFromServer(): List<Pizza>
-    suspend fun sendOrder(pizzas: List<PizzaOrder>)
+    fun sendOrder(pizzas: List<PizzaOrder>)
     fun getAllFromDb(): Flow<List<Pizza>>
     suspend fun getPizzaById(id: Int): Pizza
     fun insert(pizza: Pizza)

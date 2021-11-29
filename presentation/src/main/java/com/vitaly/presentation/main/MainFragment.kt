@@ -140,7 +140,7 @@ class MainFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        job = null
+        job?.cancel()
         super.onDestroyView()
     }
 

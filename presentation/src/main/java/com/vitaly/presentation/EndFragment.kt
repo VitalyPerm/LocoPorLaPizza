@@ -24,12 +24,14 @@ class EndFragment : Fragment() {
 
     private fun initialization() {
         binding.tvBackToMenu.setOnClickListener {
+            findNavController().popBackStack()
             findNavController().navigate(R.id.action_endFragment_to_mainFragment)
         }
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
+                    findNavController().popBackStack()
                     findNavController().navigate(R.id.action_endFragment_to_mainFragment)
                 }
             })

@@ -38,28 +38,11 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
                 val filteredList = it.filter { it.quantity > 0 }
                 adapter.setList(filteredList)
                 getPriceOfAllPizzas(filteredList)
-//                if (filteredList.isEmpty()) {
-//                    findNavController().navigate(R.id.action_cartFragment_to_mainFragment)
-//                }
                 for (i in filteredList) {
                     viewModel.pizzaListToSend.add(PizzaOrder(i.id, i.quantity))
                 }
             }
         }
-
-//        disposable.add(
-//            viewModel.pizzasListFromDb.subscribe { pizzaList ->
-//                val filteredList = pizzaList.filter { it.quantity > 0 }
-//                if (filteredList.isEmpty()) {
-//                    findNavController().navigate(R.id.action_cartFragment_to_mainFragment)
-//                }
-//                adapter.setList(filteredList)
-//                getPriceOfAllPizzas(filteredList)
-//                for (i in filteredList) {
-//                    viewModel.pizzaListToSend.add(PizzaOrder(i.id, i.quantity))
-//                }
-//            }
-//        )
         binding.buttonClear.setOnClickListener { viewModel.clear() }
         binding.checkout.setOnClickListener {
             viewModel.sendOrder()
