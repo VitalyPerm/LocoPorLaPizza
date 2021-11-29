@@ -24,7 +24,8 @@
         android:label="CartFragment" >
         <action
             android:id="@+id/action_cartFragment_to_endFragment"
-            app:destination="@id/endFragment" />
+            app:destination="@id/endFragment"
+            app:popUpToInclusive="true"/>
         <action
             android:id="@+id/action_cartFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
@@ -50,6 +51,8 @@
         android:label="EndFragment" >
         <action
             android:id="@+id/action_endFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/mainFragment"
+            app:popUpToInclusive="false" />
     </fragment>
 </navigation>

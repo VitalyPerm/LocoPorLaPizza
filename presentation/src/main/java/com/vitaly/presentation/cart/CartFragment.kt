@@ -1,9 +1,7 @@
 package com.vitaly.presentation.cart
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
@@ -14,7 +12,6 @@ import com.vitaly.domain.models.Pizza
 import com.vitaly.domain.models.PizzaOrder
 import com.vitaly.presentation.R
 import com.vitaly.presentation.databinding.FragmentCartBinding
-import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
